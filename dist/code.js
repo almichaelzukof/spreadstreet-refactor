@@ -1,5 +1,7 @@
 function onOpen() {
 }
+function showSidebar() {
+}
 function openDialog() {
 }
 function getSheetsData() {
@@ -60,6 +62,8 @@ function setActiveSheet() {
     "use strict";
     __webpack_require__.d(__webpack_exports__, "d", function() {
         return onOpen;
+    }), __webpack_require__.d(__webpack_exports__, "g", function() {
+        return showSidebar;
     }), __webpack_require__.d(__webpack_exports__, "e", function() {
         return openDialog;
     }), __webpack_require__.d(__webpack_exports__, "c", function() {
@@ -72,7 +76,10 @@ function setActiveSheet() {
         return setActiveSheet;
     });
     var onOpen = function() {
-        SpreadsheetApp.getUi().createMenu("Custom scripts").addItem("Edit sheets [sample React project]", "openDialog").addToUi();
+        SpreadsheetApp.getUi().createMenu("Custom scripts").addItem("Edit sheets [sample React project]", "openDialog").addSeparator().addItem("Open sidebar", "showSidebar").addToUi();
+    }, showSidebar = function() {
+        var html = HtmlService.createHtmlOutputFromFile("dialog").setTitle("My custom sidebar").setWidth(300);
+        SpreadsheetApp.getUi().showSidebar(html);
     }, openDialog = function() {
         var html = HtmlService.createHtmlOutputFromFile("dialog").setWidth(400).setHeight(600);
         SpreadsheetApp.getUi().showModalDialog(html, "Sheet Editor");
@@ -100,9 +107,10 @@ function setActiveSheet() {
     "use strict";
     __webpack_require__.r(__webpack_exports__), function(global) {
         var _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-        global.onOpen = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["d"], global.openDialog = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["e"], 
-        global.getSheetsData = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["c"], global.addSheet = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["a"], 
-        global.deleteSheet = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["b"], global.setActiveSheet = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["f"];
+        global.onOpen = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["d"], global.showSidebar = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["g"], 
+        global.openDialog = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["e"], global.getSheetsData = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["c"], 
+        global.addSheet = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["a"], global.deleteSheet = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["b"], 
+        global.setActiveSheet = _sheets_utilities_js__WEBPACK_IMPORTED_MODULE_0__["f"];
     }.call(this, __webpack_require__(2));
 }, function(module, exports) {
     var g;
@@ -110,7 +118,7 @@ function setActiveSheet() {
         return this;
     }();
     try {
-        g = g || Function("return this")() || (0, eval)("this");
+        g = g || new Function("return this")();
     } catch (e) {
         "object" == typeof window && (g = window);
     }

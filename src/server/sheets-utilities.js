@@ -3,7 +3,17 @@ const onOpen = () => {
   SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
     .createMenu('Custom scripts')
     .addItem('Edit sheets [sample React project]', 'openDialog')
+    .addSeparator()
+    .addItem('Open sidebar', 'showSidebar')
     .addToUi();
+};
+
+const showSidebar = () => {
+  let html = HtmlService.createHtmlOutputFromFile('dialog')
+    .setTitle('My custom sidebar')
+    .setWidth(300);
+  SpreadsheetApp.getUi()
+    .showSidebar(html);
 };
 
 const openDialog = () => {
@@ -60,6 +70,7 @@ const setActiveSheet = (sheetName) => {
 
 export {
   onOpen,
+  showSidebar,
   openDialog,
   getSheetsData,
   addSheet,

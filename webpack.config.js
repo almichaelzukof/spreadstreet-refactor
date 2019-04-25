@@ -1,17 +1,18 @@
+/* eslint-disable strict */
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const GasPlugin = require('gas-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 
 const destination = 'dist';
 
 const htmlPlugin = new HtmlWebpackPlugin({
-  template: "./src/client/dialog-template.html",
-  filename: "dialog.html",
+  template: './src/client/dialog-template.html',
+  filename: 'dialog.html',
   inlineSource: '.(js|css)$' // embed all javascript and css inline
 });
 
@@ -20,8 +21,8 @@ const htmlWebpackInlineSourcePlugin = new HtmlWebpackInlineSourcePlugin();
 const sharedConfigSettings = {
   optimization: {
     minimizer: [
-      new UglifyJSPlugin({
-        uglifyOptions: {
+      new TerserPlugin({
+        terserOptions:{
           ie8: true,
           mangle: false,
           compress: {
@@ -50,10 +51,10 @@ const eslintConfig = {
 };
 
 const appsscriptConfig = {
-  name: "COPY APPSSCRIPT.JSON",
-  entry: "./appsscript.json",
+  name: 'COPY APPSSCRIPT.JSON',
+  entry: './appsscript.json',
   plugins: [
-    new CleanWebpackPlugin([destination]),
+    new CleanWebpackPlugin(),
     new CopyWebpackPlugin([
       {
         from: './appsscript.json'
@@ -63,8 +64,8 @@ const appsscriptConfig = {
 };
 
 const clientConfig = Object.assign({}, sharedConfigSettings, {
-  name: "CLIENT",
-  entry: "./src/client/index.jsx",
+  name: 'CLIENT',
+  entry: './src/client/index.jsx',
   output: {
     path: path.resolve(__dirname, destination)
   },
@@ -78,7 +79,7 @@ const clientConfig = Object.assign({}, sharedConfigSettings, {
         test: /\.jsx$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: 'babel-loader'
         }
       },
       {
@@ -94,8 +95,8 @@ const clientConfig = Object.assign({}, sharedConfigSettings, {
 });
 
 const serverConfig = Object.assign({}, sharedConfigSettings, {
-  name: "SERVER",
-  entry: "./src/server/code.js",
+  name: 'SERVER',
+  entry: './src/server/code.js',
   output: {
     filename: 'code.js',
     path: path.resolve(__dirname, destination),
@@ -108,7 +109,7 @@ const serverConfig = Object.assign({}, sharedConfigSettings, {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: 'babel-loader'
         }
       },
     ],
