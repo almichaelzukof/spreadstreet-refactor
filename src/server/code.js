@@ -8,3 +8,4 @@ global.getSheetsData = publicFunctions.getSheetsData;
 global.addSheet = publicFunctions.addSheet;
 global.deleteSheet = publicFunctions.deleteSheet;
 global.setActiveSheet = publicFunctions.setActiveSheet;
+global.setData = publicFunctions.setData;

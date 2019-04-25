@@ -36,6 +36,10 @@ const sharedConfigSettings = {
     ]
   },
   module: {},
+  devServer: {
+    contentBase: './dist',
+    writeToDisk: true
+  }
 };
 
 const eslintConfig = {
@@ -122,5 +126,5 @@ const serverConfig = Object.assign({}, sharedConfigSettings, {
 module.exports = [
   appsscriptConfig,
   clientConfig,
-  serverConfig,
+  serverConfig
 ];

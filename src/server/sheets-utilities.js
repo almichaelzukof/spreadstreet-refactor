@@ -1,42 +1,42 @@
 // Use ES6/7 code
 const onOpen = () => {
   SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
-    .createMenu('Custom scripts')
-    .addItem('Edit sheets [sample React project]', 'openDialog')
-    .addSeparator()
-    .addItem('Open sidebar', 'showSidebar')
-    .addToUi();
+      .createMenu('Custom scripts')
+      .addItem('Edit sheets [sample React project]', 'openDialog')
+      .addSeparator()
+      .addItem('Open sidebar', 'showSidebar')
+      .addToUi();
 };
 
 const showSidebar = () => {
-  let html = HtmlService.createHtmlOutputFromFile('dialog')
-    .setTitle('My custom sidebar')
-    .setWidth(300);
+  const html = HtmlService.createHtmlOutputFromFile('dialog')
+      .setTitle('My custom sidebar')
+      .setWidth(300);
   SpreadsheetApp.getUi()
-    .showSidebar(html);
+      .showSidebar(html);
 };
 
 const openDialog = () => {
-  let html = HtmlService.createHtmlOutputFromFile('dialog')
-    .setWidth(400)
-    .setHeight(600);
+  const html = HtmlService.createHtmlOutputFromFile('dialog')
+      .setWidth(400)
+      .setHeight(600);
   SpreadsheetApp
-    .getUi() // Or DocumentApp or FormApp.
-    .showModalDialog(html, 'Sheet Editor');
+      .getUi() // Or DocumentApp or FormApp.
+      .showModalDialog(html, 'Sheet Editor');
 };
 
 const getSheets = () => SpreadsheetApp
-  .getActive()
-  .getSheets();
+    .getActive()
+    .getSheets();
 
 const getActiveSheetName = () => SpreadsheetApp
-  .getActive()
-  .getSheetName();
+    .getActive()
+    .getSheetName();
 
 const getSheetsData = () => {
-  let activeSheetName = getActiveSheetName();
+  const activeSheetName = getActiveSheetName();
   return getSheets().map((sheet, index) => {
-    let sheetName = sheet.getName();
+    const sheetName = sheet.getName();
     return {
       text: sheetName,
       sheetIndex: index,
@@ -47,25 +47,41 @@ const getSheetsData = () => {
 
 const addSheet = (sheetTitle) => {
   SpreadsheetApp
-    .getActive()
-    .insertSheet(sheetTitle);
+      .getActive()
+      .insertSheet(sheetTitle);
   return getSheetsData();
 };
 
 const deleteSheet = (sheetIndex) => {
-  let sheets = getSheets();
+  const sheets = getSheets();
   SpreadsheetApp
-    .getActive()
-    .deleteSheet(sheets[sheetIndex]);
+      .getActive()
+      .deleteSheet(sheets[sheetIndex]);
   return getSheetsData();
 };
 
 const setActiveSheet = (sheetName) => {
   SpreadsheetApp
-    .getActive()
-    .getSheetByName(sheetName)
-    .activate();
+      .getActive()
+      .getSheetByName(sheetName)
+      .activate();
   return getSheetsData();
+};
+
+const setData = (data) => {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = SpreadsheetApp.getActiveSheet();
+  const activeCell = ss.getActiveCell();
+
+  const row = activeCell.getRow();
+  const col = activeCell.getColumn();
+
+  const lastRow = data.length;
+  const lastCol = data[0].length;
+
+  const newRange = sheet.getRange(row, col, lastRow, lastCol);
+
+  newRange.setValues(data);
 };
 
 export {
@@ -76,4 +92,5 @@ export {
   addSheet,
   deleteSheet,
   setActiveSheet,
+  setData,
 };
