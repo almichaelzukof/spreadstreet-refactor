@@ -107,6 +107,7 @@ function setData() {
     }, setActiveSheet = function(sheetName) {
         return SpreadsheetApp.getActive().getSheetByName(sheetName).activate(), getSheetsData();
     }, setData = function(data) {
+        console.log("parsed data is ", data);
         var ss = SpreadsheetApp.getActiveSpreadsheet(), sheet = SpreadsheetApp.getActiveSheet(), activeCell = ss.getActiveCell(), row = activeCell.getRow(), col = activeCell.getColumn(), lastRow = data.length, lastCol = data[0].length;
         sheet.getRange(row, col, lastRow, lastCol).setValues(data);
     };

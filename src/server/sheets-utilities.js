@@ -69,6 +69,7 @@ const setActiveSheet = (sheetName) => {
 };
 
 const setData = (data) => {
+  console.log('parsed data is ', data);
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = SpreadsheetApp.getActiveSheet();
   const activeCell = ss.getActiveCell();

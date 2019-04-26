@@ -1,4 +1,4 @@
-import {app, endpoints} from './stitch';
+import {app, endpoints, assets} from './stitch';
 import {fetchEndpoints} from './queries';
 import {
   loginAnonymous,
@@ -6,7 +6,7 @@ import {
   logoutUser,
 } from './authentication';
 
-export {app, endpoints};
+export {app, endpoints, assets};
 export {fetchEndpoints};
 export {
   loginAnonymous,

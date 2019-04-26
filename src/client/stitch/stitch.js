@@ -11,5 +11,6 @@ const app = Stitch.initializeAppClient(APP_ID);
 //    for the 'todo' collection.
 const mongodb = app.getServiceClient(RemoteMongoClient.factory, 'api_hub_dev');
 const endpoints = mongodb.db('api-hub-dev').collection('endpoints');
+const assets = mongodb.db('CryptoSheets').collection('assets');
 
-export {app, endpoints};
+export {app, endpoints, assets};
