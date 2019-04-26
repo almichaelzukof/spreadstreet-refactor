@@ -1,10 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SheetEditor from './components/sheet-editor';
+import {app,
+  isLoggedIn,
+  loginAnonymous,
+  logoutUser,
+} from './stitch';
+import LoginAnon from './components/LoginAnon';
 import App from './components/App';
 
-ReactDOM.render(
-  // <SheetEditor />,
-  <App />,
-  document.getElementById('index')
-);
+import './styles.css';
+
+function MyApp(props) {
+  return isLoggedIn() ? (
+    <App handleLogout={() => logoutUser(app.currentUser)} />
+  ) : (
+    <LoginAnon loginAnonymous={loginAnonymous} />
+  );
+}
+
+const rootElement = document.getElementById('index');
+ReactDOM.render(<MyApp />, rootElement);
