@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {fetchEndpoints} from './../stitch';
 import Navbar from './Navbar';
 import PropTypes from 'prop-types';
 
@@ -22,6 +23,7 @@ export default function App(props) {
     <div className='container mx-auto'>
       <Navbar />
       <Endpoints />
+      <button onClick={() => fetchEndpoints()}>fetch</button>
     </div>
   );
 }

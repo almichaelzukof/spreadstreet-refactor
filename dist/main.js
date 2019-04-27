@@ -12279,15 +12279,12 @@
         onClick: () => void (0, _stitch.logoutUser)(_stitch.app.auth.user).then(() => {
             window.location.reload();
         })
-    }, "Log Out"), handleLinks = menuItems => {
-        const hidden = [ "Sign Out" ];
-        return menuItems.filter(item => !hidden.includes(item.name));
-    };
+    }, "Log Out");
     var _default = function() {
-        const [globalState] = (0, _store["default"])(), {menuItems: menuItems} = globalState;
+        const [globalState] = (0, _store["default"])(), {menuItems: menuItems, stitchUser: stitchUser} = globalState;
         return _react["default"].createElement("nav", null, _react["default"].createElement("ul", {
             className: "list-reset flex flex-row m-4"
-        }, handleLinks(menuItems).map(item => _react["default"].createElement("li", {
+        }, menuItems.map(item => _react["default"].createElement("li", {
             className: "p-4"
         }, item.name))), _react["default"].createElement(LogoutButton, null));
     };
