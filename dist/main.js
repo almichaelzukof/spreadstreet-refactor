@@ -2375,7 +2375,7 @@
     }).call(this, __webpack_require__(7), __webpack_require__(4).Buffer);
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var bind = __webpack_require__(13), isBuffer = __webpack_require__(43), toString = Object.prototype.toString;
+    var bind = __webpack_require__(13), isBuffer = __webpack_require__(40), toString = Object.prototype.toString;
     function isArray(val) {
         return "[object Array]" === toString.call(val);
     }
@@ -3411,7 +3411,7 @@
 }, function(module, exports, __webpack_require__) {
     "use strict";
     (function(process) {
-        var utils = __webpack_require__(1), normalizeHeaderName = __webpack_require__(45), DEFAULT_CONTENT_TYPE = {
+        var utils = __webpack_require__(1), normalizeHeaderName = __webpack_require__(42), DEFAULT_CONTENT_TYPE = {
             "Content-Type": "application/x-www-form-urlencoded"
         };
         function setContentTypeIfUnset(headers, value) {
@@ -3619,7 +3619,7 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports["default"] = void 0;
-    var _react = _interopRequireDefault(__webpack_require__(2)), _useGlobalHook = _interopRequireDefault(__webpack_require__(38)), actions = function(obj) {
+    var _react = _interopRequireDefault(__webpack_require__(2)), _useGlobalHook = _interopRequireDefault(__webpack_require__(35)), actions = function(obj) {
         if (obj && obj.__esModule) return obj;
         var newObj = {};
         if (null != obj) for (var key in obj) if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -3627,7 +3627,7 @@
             desc.get || desc.set ? Object.defineProperty(newObj, key, desc) : newObj[key] = obj[key];
         }
         return newObj["default"] = obj, newObj;
-    }(__webpack_require__(39));
+    }(__webpack_require__(36));
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
             "default": obj
@@ -3636,6 +3636,7 @@
     var _default = (0, _useGlobalHook["default"])(_react["default"], {
         status: "INITIAL",
         endpoints: [],
+        parsed: [],
         menuItems: [ {
             name: "Browse",
             link: "/browse",
@@ -3665,7 +3666,7 @@
     };
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var utils = __webpack_require__(1), settle = __webpack_require__(46), buildURL = __webpack_require__(48), parseHeaders = __webpack_require__(49), isURLSameOrigin = __webpack_require__(50), createError = __webpack_require__(15), btoa = "undefined" != typeof window && window.btoa && window.btoa.bind(window) || __webpack_require__(51);
+    var utils = __webpack_require__(1), settle = __webpack_require__(43), buildURL = __webpack_require__(45), parseHeaders = __webpack_require__(46), isURLSameOrigin = __webpack_require__(47), createError = __webpack_require__(15), btoa = "undefined" != typeof window && window.btoa && window.btoa.bind(window) || __webpack_require__(48);
     module.exports = function(config) {
         return new Promise(function(resolve, reject) {
             var requestData = config.data, requestHeaders = config.headers;
@@ -3696,7 +3697,7 @@
                 reject(createError("timeout of " + config.timeout + "ms exceeded", config, "ECONNABORTED", request)), 
                 request = null;
             }, utils.isStandardBrowserEnv()) {
-                var cookies = __webpack_require__(52), xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ? cookies.read(config.xsrfCookieName) : undefined;
+                var cookies = __webpack_require__(49), xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ? cookies.read(config.xsrfCookieName) : undefined;
                 xsrfValue && (requestHeaders[config.xsrfHeaderName] = xsrfValue);
             }
             if ("setRequestHeader" in request && utils.forEach(requestHeaders, function(val, key) {
@@ -3715,7 +3716,7 @@
     };
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var enhanceError = __webpack_require__(47);
+    var enhanceError = __webpack_require__(44);
     module.exports = function(message, config, code, request, response) {
         var error = new Error(message);
         return enhanceError(error, config, code, request, response);
@@ -12392,8 +12393,7 @@
         }
         return newObj["default"] = obj, newObj;
     }(__webpack_require__(2)), _propTypes = (_interopRequireDefault(__webpack_require__(34)), 
-    _interopRequireDefault(__webpack_require__(3))), _Endpoints = (_interopRequireDefault(__webpack_require__(35)), 
-    _interopRequireDefault(__webpack_require__(12)), _interopRequireDefault(__webpack_require__(60)));
+    _interopRequireDefault(__webpack_require__(3))), _store = _interopRequireDefault(__webpack_require__(12)), _Endpoints = _interopRequireDefault(__webpack_require__(60));
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
             "default": obj
@@ -12402,8 +12402,10 @@
     App.propTypes = {
         children: _propTypes["default"].node
     };
+    const sheety = "https://api.sheety.co/7379c3b5-79ee-40f2-8dac-35ad9fb0aa8e";
     function App(props) {
-        return _react["default"].createElement("div", {
+        const [globalState, globalActions] = (0, _store["default"])(), {status: status, endpoints: endpoints, parsed: parsed} = globalState;
+        return "INITIAL" === status && globalActions.endpoints.getEndpoints(sheety), _react["default"].createElement("div", {
             className: "container mx-auto"
         }, _react["default"].createElement(_Endpoints["default"], null));
     }
@@ -12463,7 +12465,356 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports["default"] = void 0;
-    var _papaparse = _interopRequireDefault(__webpack_require__(36)), _flatten = _interopRequireDefault(__webpack_require__(37));
+    var _default = (React, initialState, actions) => {
+        const store = {
+            state: initialState,
+            listeners: []
+        };
+        return store.setState = function(newState) {
+            this.state = {
+                ...this.state,
+                ...newState
+            }, this.listeners.forEach(listener => {
+                listener(this.state);
+            });
+        }.bind(store), store.actions = function associateActions(store, actions) {
+            const associatedActions = {};
+            return Object.keys(actions).forEach(key => {
+                "function" == typeof actions[key] && (associatedActions[key] = actions[key].bind(null, store)), 
+                "object" == typeof actions[key] && (associatedActions[key] = associateActions(store, actions[key]));
+            }), associatedActions;
+        }(store, actions), function(React) {
+            const newListener = React.useState()[1];
+            return React.useEffect(() => (this.listeners.push(newListener), () => {
+                this.listeners = this.listeners.filter(listener => listener !== newListener);
+            }), []), [ this.state, this.actions ];
+        }.bind(store, React);
+    };
+    exports["default"] = _default;
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+        value: !0
+    }), exports.endpoints = void 0;
+    var endpoints = function(obj) {
+        if (obj && obj.__esModule) return obj;
+        var newObj = {};
+        if (null != obj) for (var key in obj) if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {};
+            desc.get || desc.set ? Object.defineProperty(newObj, key, desc) : newObj[key] = obj[key];
+        }
+        return newObj["default"] = obj, newObj;
+    }(__webpack_require__(37));
+    exports.endpoints = endpoints;
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+        value: !0
+    }), exports.getEndpoints = void 0;
+    var _axios = _interopRequireDefault(__webpack_require__(38)), _parse = _interopRequireDefault(__webpack_require__(57));
+    function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : {
+            "default": obj
+        };
+    }
+    exports.getEndpoints = (async (store, url) => {
+        store.setState({
+            status: "LOADING"
+        });
+        try {
+            const endpoints = (await _axios["default"].get(url)).data, status = 0 == endpoints.length ? "EMPTY" : "SUCCESS", parsed = (0, 
+            _parse["default"])(endpoints);
+            store.setState({
+                endpoints: endpoints,
+                status: status,
+                parsed: parsed
+            });
+        } catch (error) {
+            const status = error.response && 404 === error.response.status ? "NOT_FOUND" : "ERROR";
+            store.setState({
+                status: status
+            });
+        }
+    });
+}, function(module, exports, __webpack_require__) {
+    module.exports = __webpack_require__(39);
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1), bind = __webpack_require__(13), Axios = __webpack_require__(41), defaults = __webpack_require__(8);
+    function createInstance(defaultConfig) {
+        var context = new Axios(defaultConfig), instance = bind(Axios.prototype.request, context);
+        return utils.extend(instance, Axios.prototype, context), utils.extend(instance, context), 
+        instance;
+    }
+    var axios = createInstance(defaults);
+    axios.Axios = Axios, axios.create = function(instanceConfig) {
+        return createInstance(utils.merge(defaults, instanceConfig));
+    }, axios.Cancel = __webpack_require__(17), axios.CancelToken = __webpack_require__(55), 
+    axios.isCancel = __webpack_require__(16), axios.all = function(promises) {
+        return Promise.all(promises);
+    }, axios.spread = __webpack_require__(56), module.exports = axios, module.exports["default"] = axios;
+}, function(module, exports) {
+    function isBuffer(obj) {
+        return !!obj.constructor && "function" == typeof obj.constructor.isBuffer && obj.constructor.isBuffer(obj);
+    }
+    module.exports = function(obj) {
+        return null != obj && (isBuffer(obj) || function(obj) {
+            return "function" == typeof obj.readFloatLE && "function" == typeof obj.slice && isBuffer(obj.slice(0, 0));
+        }(obj) || !!obj._isBuffer);
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var defaults = __webpack_require__(8), utils = __webpack_require__(1), InterceptorManager = __webpack_require__(50), dispatchRequest = __webpack_require__(51);
+    function Axios(instanceConfig) {
+        this.defaults = instanceConfig, this.interceptors = {
+            request: new InterceptorManager(),
+            response: new InterceptorManager()
+        };
+    }
+    Axios.prototype.request = function(config) {
+        "string" == typeof config && (config = utils.merge({
+            url: arguments[0]
+        }, arguments[1])), (config = utils.merge(defaults, {
+            method: "get"
+        }, this.defaults, config)).method = config.method.toLowerCase();
+        var chain = [ dispatchRequest, undefined ], promise = Promise.resolve(config);
+        for (this.interceptors.request.forEach(function(interceptor) {
+            chain.unshift(interceptor.fulfilled, interceptor.rejected);
+        }), this.interceptors.response.forEach(function(interceptor) {
+            chain.push(interceptor.fulfilled, interceptor.rejected);
+        }); chain.length; ) promise = promise.then(chain.shift(), chain.shift());
+        return promise;
+    }, utils.forEach([ "delete", "get", "head", "options" ], function(method) {
+        Axios.prototype[method] = function(url, config) {
+            return this.request(utils.merge(config || {}, {
+                method: method,
+                url: url
+            }));
+        };
+    }), utils.forEach([ "post", "put", "patch" ], function(method) {
+        Axios.prototype[method] = function(url, data, config) {
+            return this.request(utils.merge(config || {}, {
+                method: method,
+                url: url,
+                data: data
+            }));
+        };
+    }), module.exports = Axios;
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1);
+    module.exports = function(headers, normalizedName) {
+        utils.forEach(headers, function(value, name) {
+            name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase() && (headers[normalizedName] = value, 
+            delete headers[name]);
+        });
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var createError = __webpack_require__(15);
+    module.exports = function(resolve, reject, response) {
+        var validateStatus = response.config.validateStatus;
+        response.status && validateStatus && !validateStatus(response.status) ? reject(createError("Request failed with status code " + response.status, response.config, null, response.request, response)) : resolve(response);
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    module.exports = function(error, config, code, request, response) {
+        return error.config = config, code && (error.code = code), error.request = request, 
+        error.response = response, error;
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1);
+    function encode(val) {
+        return encodeURIComponent(val).replace(/%40/gi, "@").replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+").replace(/%5B/gi, "[").replace(/%5D/gi, "]");
+    }
+    module.exports = function(url, params, paramsSerializer) {
+        if (!params) return url;
+        var serializedParams;
+        if (paramsSerializer) serializedParams = paramsSerializer(params); else if (utils.isURLSearchParams(params)) serializedParams = params.toString(); else {
+            var parts = [];
+            utils.forEach(params, function(val, key) {
+                null != val && (utils.isArray(val) ? key += "[]" : val = [ val ], utils.forEach(val, function(v) {
+                    utils.isDate(v) ? v = v.toISOString() : utils.isObject(v) && (v = JSON.stringify(v)), 
+                    parts.push(encode(key) + "=" + encode(v));
+                }));
+            }), serializedParams = parts.join("&");
+        }
+        return serializedParams && (url += (-1 === url.indexOf("?") ? "?" : "&") + serializedParams), 
+        url;
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1), ignoreDuplicateOf = [ "age", "authorization", "content-length", "content-type", "etag", "expires", "from", "host", "if-modified-since", "if-unmodified-since", "last-modified", "location", "max-forwards", "proxy-authorization", "referer", "retry-after", "user-agent" ];
+    module.exports = function(headers) {
+        var key, val, i, parsed = {};
+        return headers ? (utils.forEach(headers.split("\n"), function(line) {
+            if (i = line.indexOf(":"), key = utils.trim(line.substr(0, i)).toLowerCase(), val = utils.trim(line.substr(i + 1)), 
+            key) {
+                if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) return;
+                parsed[key] = "set-cookie" === key ? (parsed[key] ? parsed[key] : []).concat([ val ]) : parsed[key] ? parsed[key] + ", " + val : val;
+            }
+        }), parsed) : parsed;
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1);
+    module.exports = utils.isStandardBrowserEnv() ? function() {
+        var originURL, msie = /(msie|trident)/i.test(navigator.userAgent), urlParsingNode = document.createElement("a");
+        function resolveURL(url) {
+            var href = url;
+            return msie && (urlParsingNode.setAttribute("href", href), href = urlParsingNode.href), 
+            urlParsingNode.setAttribute("href", href), {
+                href: urlParsingNode.href,
+                protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, "") : "",
+                host: urlParsingNode.host,
+                search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, "") : "",
+                hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, "") : "",
+                hostname: urlParsingNode.hostname,
+                port: urlParsingNode.port,
+                pathname: "/" === urlParsingNode.pathname.charAt(0) ? urlParsingNode.pathname : "/" + urlParsingNode.pathname
+            };
+        }
+        return originURL = resolveURL(window.location.href), function(requestURL) {
+            var parsed = utils.isString(requestURL) ? resolveURL(requestURL) : requestURL;
+            return parsed.protocol === originURL.protocol && parsed.host === originURL.host;
+        };
+    }() : function() {
+        return !0;
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    function E() {
+        this.message = "String contains an invalid character";
+    }
+    E.prototype = new Error(), E.prototype.code = 5, E.prototype.name = "InvalidCharacterError", 
+    module.exports = function(input) {
+        for (var block, charCode, str = String(input), output = "", idx = 0, map = chars; str.charAt(0 | idx) || (map = "=", 
+        idx % 1); output += map.charAt(63 & block >> 8 - idx % 1 * 8)) {
+            if ((charCode = str.charCodeAt(idx += .75)) > 255) throw new E();
+            block = block << 8 | charCode;
+        }
+        return output;
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1);
+    module.exports = utils.isStandardBrowserEnv() ? {
+        write: function(name, value, expires, path, domain, secure) {
+            var cookie = [];
+            cookie.push(name + "=" + encodeURIComponent(value)), utils.isNumber(expires) && cookie.push("expires=" + new Date(expires).toGMTString()), 
+            utils.isString(path) && cookie.push("path=" + path), utils.isString(domain) && cookie.push("domain=" + domain), 
+            !0 === secure && cookie.push("secure"), document.cookie = cookie.join("; ");
+        },
+        read: function(name) {
+            var match = document.cookie.match(new RegExp("(^|;\\s*)(" + name + ")=([^;]*)"));
+            return match ? decodeURIComponent(match[3]) : null;
+        },
+        remove: function(name) {
+            this.write(name, "", Date.now() - 864e5);
+        }
+    } : {
+        write: function() {},
+        read: function() {
+            return null;
+        },
+        remove: function() {}
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1);
+    function InterceptorManager() {
+        this.handlers = [];
+    }
+    InterceptorManager.prototype.use = function(fulfilled, rejected) {
+        return this.handlers.push({
+            fulfilled: fulfilled,
+            rejected: rejected
+        }), this.handlers.length - 1;
+    }, InterceptorManager.prototype.eject = function(id) {
+        this.handlers[id] && (this.handlers[id] = null);
+    }, InterceptorManager.prototype.forEach = function(fn) {
+        utils.forEach(this.handlers, function(h) {
+            null !== h && fn(h);
+        });
+    }, module.exports = InterceptorManager;
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1), transformData = __webpack_require__(52), isCancel = __webpack_require__(16), defaults = __webpack_require__(8), isAbsoluteURL = __webpack_require__(53), combineURLs = __webpack_require__(54);
+    function throwIfCancellationRequested(config) {
+        config.cancelToken && config.cancelToken.throwIfRequested();
+    }
+    module.exports = function(config) {
+        return throwIfCancellationRequested(config), config.baseURL && !isAbsoluteURL(config.url) && (config.url = combineURLs(config.baseURL, config.url)), 
+        config.headers = config.headers || {}, config.data = transformData(config.data, config.headers, config.transformRequest), 
+        config.headers = utils.merge(config.headers.common || {}, config.headers[config.method] || {}, config.headers || {}), 
+        utils.forEach([ "delete", "get", "head", "post", "put", "patch", "common" ], function(method) {
+            delete config.headers[method];
+        }), (config.adapter || defaults.adapter)(config).then(function(response) {
+            return throwIfCancellationRequested(config), response.data = transformData(response.data, response.headers, config.transformResponse), 
+            response;
+        }, function(reason) {
+            return isCancel(reason) || (throwIfCancellationRequested(config), reason && reason.response && (reason.response.data = transformData(reason.response.data, reason.response.headers, config.transformResponse))), 
+            Promise.reject(reason);
+        });
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1);
+    module.exports = function(data, headers, fns) {
+        return utils.forEach(fns, function(fn) {
+            data = fn(data, headers);
+        }), data;
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    module.exports = function(url) {
+        return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    module.exports = function(baseURL, relativeURL) {
+        return relativeURL ? baseURL.replace(/\/+$/, "") + "/" + relativeURL.replace(/^\/+/, "") : baseURL;
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var Cancel = __webpack_require__(17);
+    function CancelToken(executor) {
+        if ("function" != typeof executor) throw new TypeError("executor must be a function.");
+        var resolvePromise;
+        this.promise = new Promise(function(resolve) {
+            resolvePromise = resolve;
+        });
+        var token = this;
+        executor(function(message) {
+            token.reason || (token.reason = new Cancel(message), resolvePromise(token.reason));
+        });
+    }
+    CancelToken.prototype.throwIfRequested = function() {
+        if (this.reason) throw this.reason;
+    }, CancelToken.source = function() {
+        var cancel;
+        return {
+            token: new CancelToken(function(c) {
+                cancel = c;
+            }),
+            cancel: cancel
+        };
+    }, module.exports = CancelToken;
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    module.exports = function(callback) {
+        return function(arr) {
+            return callback.apply(null, arr);
+        };
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+        value: !0
+    }), exports["default"] = void 0;
+    var _papaparse = _interopRequireDefault(__webpack_require__(58)), _flatten = _interopRequireDefault(__webpack_require__(59));
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
             "default": obj
@@ -13098,350 +13449,6 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports["default"] = void 0;
-    var _default = (React, initialState, actions) => {
-        const store = {
-            state: initialState,
-            listeners: []
-        };
-        return store.setState = function(newState) {
-            this.state = {
-                ...this.state,
-                ...newState
-            }, this.listeners.forEach(listener => {
-                listener(this.state);
-            });
-        }.bind(store), store.actions = function associateActions(store, actions) {
-            const associatedActions = {};
-            return Object.keys(actions).forEach(key => {
-                "function" == typeof actions[key] && (associatedActions[key] = actions[key].bind(null, store)), 
-                "object" == typeof actions[key] && (associatedActions[key] = associateActions(store, actions[key]));
-            }), associatedActions;
-        }(store, actions), function(React) {
-            const newListener = React.useState()[1];
-            return React.useEffect(() => (this.listeners.push(newListener), () => {
-                this.listeners = this.listeners.filter(listener => listener !== newListener);
-            }), []), [ this.state, this.actions ];
-        }.bind(store, React);
-    };
-    exports["default"] = _default;
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-        value: !0
-    }), exports.endpoints = void 0;
-    var endpoints = function(obj) {
-        if (obj && obj.__esModule) return obj;
-        var newObj = {};
-        if (null != obj) for (var key in obj) if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {};
-            desc.get || desc.set ? Object.defineProperty(newObj, key, desc) : newObj[key] = obj[key];
-        }
-        return newObj["default"] = obj, newObj;
-    }(__webpack_require__(40));
-    exports.endpoints = endpoints;
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-        value: !0
-    }), exports.getEndpoints = void 0;
-    var obj, _axios = (obj = __webpack_require__(41)) && obj.__esModule ? obj : {
-        "default": obj
-    };
-    exports.getEndpoints = (async (store, url) => {
-        store.setState({
-            status: "LOADING"
-        });
-        try {
-            const endpoints = (await _axios["default"].get(url)).data, status = 0 == endpoints.length ? "EMPTY" : "SUCCESS";
-            store.setState({
-                endpoints: endpoints,
-                status: status
-            });
-        } catch (error) {
-            const status = error.response && 404 === error.response.status ? "NOT_FOUND" : "ERROR";
-            store.setState({
-                status: status
-            });
-        }
-    });
-}, function(module, exports, __webpack_require__) {
-    module.exports = __webpack_require__(42);
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1), bind = __webpack_require__(13), Axios = __webpack_require__(44), defaults = __webpack_require__(8);
-    function createInstance(defaultConfig) {
-        var context = new Axios(defaultConfig), instance = bind(Axios.prototype.request, context);
-        return utils.extend(instance, Axios.prototype, context), utils.extend(instance, context), 
-        instance;
-    }
-    var axios = createInstance(defaults);
-    axios.Axios = Axios, axios.create = function(instanceConfig) {
-        return createInstance(utils.merge(defaults, instanceConfig));
-    }, axios.Cancel = __webpack_require__(17), axios.CancelToken = __webpack_require__(58), 
-    axios.isCancel = __webpack_require__(16), axios.all = function(promises) {
-        return Promise.all(promises);
-    }, axios.spread = __webpack_require__(59), module.exports = axios, module.exports["default"] = axios;
-}, function(module, exports) {
-    function isBuffer(obj) {
-        return !!obj.constructor && "function" == typeof obj.constructor.isBuffer && obj.constructor.isBuffer(obj);
-    }
-    module.exports = function(obj) {
-        return null != obj && (isBuffer(obj) || function(obj) {
-            return "function" == typeof obj.readFloatLE && "function" == typeof obj.slice && isBuffer(obj.slice(0, 0));
-        }(obj) || !!obj._isBuffer);
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var defaults = __webpack_require__(8), utils = __webpack_require__(1), InterceptorManager = __webpack_require__(53), dispatchRequest = __webpack_require__(54);
-    function Axios(instanceConfig) {
-        this.defaults = instanceConfig, this.interceptors = {
-            request: new InterceptorManager(),
-            response: new InterceptorManager()
-        };
-    }
-    Axios.prototype.request = function(config) {
-        "string" == typeof config && (config = utils.merge({
-            url: arguments[0]
-        }, arguments[1])), (config = utils.merge(defaults, {
-            method: "get"
-        }, this.defaults, config)).method = config.method.toLowerCase();
-        var chain = [ dispatchRequest, undefined ], promise = Promise.resolve(config);
-        for (this.interceptors.request.forEach(function(interceptor) {
-            chain.unshift(interceptor.fulfilled, interceptor.rejected);
-        }), this.interceptors.response.forEach(function(interceptor) {
-            chain.push(interceptor.fulfilled, interceptor.rejected);
-        }); chain.length; ) promise = promise.then(chain.shift(), chain.shift());
-        return promise;
-    }, utils.forEach([ "delete", "get", "head", "options" ], function(method) {
-        Axios.prototype[method] = function(url, config) {
-            return this.request(utils.merge(config || {}, {
-                method: method,
-                url: url
-            }));
-        };
-    }), utils.forEach([ "post", "put", "patch" ], function(method) {
-        Axios.prototype[method] = function(url, data, config) {
-            return this.request(utils.merge(config || {}, {
-                method: method,
-                url: url,
-                data: data
-            }));
-        };
-    }), module.exports = Axios;
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1);
-    module.exports = function(headers, normalizedName) {
-        utils.forEach(headers, function(value, name) {
-            name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase() && (headers[normalizedName] = value, 
-            delete headers[name]);
-        });
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var createError = __webpack_require__(15);
-    module.exports = function(resolve, reject, response) {
-        var validateStatus = response.config.validateStatus;
-        response.status && validateStatus && !validateStatus(response.status) ? reject(createError("Request failed with status code " + response.status, response.config, null, response.request, response)) : resolve(response);
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    module.exports = function(error, config, code, request, response) {
-        return error.config = config, code && (error.code = code), error.request = request, 
-        error.response = response, error;
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1);
-    function encode(val) {
-        return encodeURIComponent(val).replace(/%40/gi, "@").replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+").replace(/%5B/gi, "[").replace(/%5D/gi, "]");
-    }
-    module.exports = function(url, params, paramsSerializer) {
-        if (!params) return url;
-        var serializedParams;
-        if (paramsSerializer) serializedParams = paramsSerializer(params); else if (utils.isURLSearchParams(params)) serializedParams = params.toString(); else {
-            var parts = [];
-            utils.forEach(params, function(val, key) {
-                null != val && (utils.isArray(val) ? key += "[]" : val = [ val ], utils.forEach(val, function(v) {
-                    utils.isDate(v) ? v = v.toISOString() : utils.isObject(v) && (v = JSON.stringify(v)), 
-                    parts.push(encode(key) + "=" + encode(v));
-                }));
-            }), serializedParams = parts.join("&");
-        }
-        return serializedParams && (url += (-1 === url.indexOf("?") ? "?" : "&") + serializedParams), 
-        url;
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1), ignoreDuplicateOf = [ "age", "authorization", "content-length", "content-type", "etag", "expires", "from", "host", "if-modified-since", "if-unmodified-since", "last-modified", "location", "max-forwards", "proxy-authorization", "referer", "retry-after", "user-agent" ];
-    module.exports = function(headers) {
-        var key, val, i, parsed = {};
-        return headers ? (utils.forEach(headers.split("\n"), function(line) {
-            if (i = line.indexOf(":"), key = utils.trim(line.substr(0, i)).toLowerCase(), val = utils.trim(line.substr(i + 1)), 
-            key) {
-                if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) return;
-                parsed[key] = "set-cookie" === key ? (parsed[key] ? parsed[key] : []).concat([ val ]) : parsed[key] ? parsed[key] + ", " + val : val;
-            }
-        }), parsed) : parsed;
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1);
-    module.exports = utils.isStandardBrowserEnv() ? function() {
-        var originURL, msie = /(msie|trident)/i.test(navigator.userAgent), urlParsingNode = document.createElement("a");
-        function resolveURL(url) {
-            var href = url;
-            return msie && (urlParsingNode.setAttribute("href", href), href = urlParsingNode.href), 
-            urlParsingNode.setAttribute("href", href), {
-                href: urlParsingNode.href,
-                protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, "") : "",
-                host: urlParsingNode.host,
-                search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, "") : "",
-                hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, "") : "",
-                hostname: urlParsingNode.hostname,
-                port: urlParsingNode.port,
-                pathname: "/" === urlParsingNode.pathname.charAt(0) ? urlParsingNode.pathname : "/" + urlParsingNode.pathname
-            };
-        }
-        return originURL = resolveURL(window.location.href), function(requestURL) {
-            var parsed = utils.isString(requestURL) ? resolveURL(requestURL) : requestURL;
-            return parsed.protocol === originURL.protocol && parsed.host === originURL.host;
-        };
-    }() : function() {
-        return !0;
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-    function E() {
-        this.message = "String contains an invalid character";
-    }
-    E.prototype = new Error(), E.prototype.code = 5, E.prototype.name = "InvalidCharacterError", 
-    module.exports = function(input) {
-        for (var block, charCode, str = String(input), output = "", idx = 0, map = chars; str.charAt(0 | idx) || (map = "=", 
-        idx % 1); output += map.charAt(63 & block >> 8 - idx % 1 * 8)) {
-            if ((charCode = str.charCodeAt(idx += .75)) > 255) throw new E();
-            block = block << 8 | charCode;
-        }
-        return output;
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1);
-    module.exports = utils.isStandardBrowserEnv() ? {
-        write: function(name, value, expires, path, domain, secure) {
-            var cookie = [];
-            cookie.push(name + "=" + encodeURIComponent(value)), utils.isNumber(expires) && cookie.push("expires=" + new Date(expires).toGMTString()), 
-            utils.isString(path) && cookie.push("path=" + path), utils.isString(domain) && cookie.push("domain=" + domain), 
-            !0 === secure && cookie.push("secure"), document.cookie = cookie.join("; ");
-        },
-        read: function(name) {
-            var match = document.cookie.match(new RegExp("(^|;\\s*)(" + name + ")=([^;]*)"));
-            return match ? decodeURIComponent(match[3]) : null;
-        },
-        remove: function(name) {
-            this.write(name, "", Date.now() - 864e5);
-        }
-    } : {
-        write: function() {},
-        read: function() {
-            return null;
-        },
-        remove: function() {}
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1);
-    function InterceptorManager() {
-        this.handlers = [];
-    }
-    InterceptorManager.prototype.use = function(fulfilled, rejected) {
-        return this.handlers.push({
-            fulfilled: fulfilled,
-            rejected: rejected
-        }), this.handlers.length - 1;
-    }, InterceptorManager.prototype.eject = function(id) {
-        this.handlers[id] && (this.handlers[id] = null);
-    }, InterceptorManager.prototype.forEach = function(fn) {
-        utils.forEach(this.handlers, function(h) {
-            null !== h && fn(h);
-        });
-    }, module.exports = InterceptorManager;
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1), transformData = __webpack_require__(55), isCancel = __webpack_require__(16), defaults = __webpack_require__(8), isAbsoluteURL = __webpack_require__(56), combineURLs = __webpack_require__(57);
-    function throwIfCancellationRequested(config) {
-        config.cancelToken && config.cancelToken.throwIfRequested();
-    }
-    module.exports = function(config) {
-        return throwIfCancellationRequested(config), config.baseURL && !isAbsoluteURL(config.url) && (config.url = combineURLs(config.baseURL, config.url)), 
-        config.headers = config.headers || {}, config.data = transformData(config.data, config.headers, config.transformRequest), 
-        config.headers = utils.merge(config.headers.common || {}, config.headers[config.method] || {}, config.headers || {}), 
-        utils.forEach([ "delete", "get", "head", "post", "put", "patch", "common" ], function(method) {
-            delete config.headers[method];
-        }), (config.adapter || defaults.adapter)(config).then(function(response) {
-            return throwIfCancellationRequested(config), response.data = transformData(response.data, response.headers, config.transformResponse), 
-            response;
-        }, function(reason) {
-            return isCancel(reason) || (throwIfCancellationRequested(config), reason && reason.response && (reason.response.data = transformData(reason.response.data, reason.response.headers, config.transformResponse))), 
-            Promise.reject(reason);
-        });
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1);
-    module.exports = function(data, headers, fns) {
-        return utils.forEach(fns, function(fn) {
-            data = fn(data, headers);
-        }), data;
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    module.exports = function(url) {
-        return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    module.exports = function(baseURL, relativeURL) {
-        return relativeURL ? baseURL.replace(/\/+$/, "") + "/" + relativeURL.replace(/^\/+/, "") : baseURL;
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var Cancel = __webpack_require__(17);
-    function CancelToken(executor) {
-        if ("function" != typeof executor) throw new TypeError("executor must be a function.");
-        var resolvePromise;
-        this.promise = new Promise(function(resolve) {
-            resolvePromise = resolve;
-        });
-        var token = this;
-        executor(function(message) {
-            token.reason || (token.reason = new Cancel(message), resolvePromise(token.reason));
-        });
-    }
-    CancelToken.prototype.throwIfRequested = function() {
-        if (this.reason) throw this.reason;
-    }, CancelToken.source = function() {
-        var cancel;
-        return {
-            token: new CancelToken(function(c) {
-                cancel = c;
-            }),
-            cancel: cancel
-        };
-    }, module.exports = CancelToken;
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    module.exports = function(callback) {
-        return function(arr) {
-            return callback.apply(null, arr);
-        };
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-        value: !0
-    }), exports["default"] = void 0;
     var _react = _interopRequireDefault(__webpack_require__(2)), _store = _interopRequireDefault(__webpack_require__(12));
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -13449,13 +13456,15 @@
         };
     }
     var _default = () => {
-        const [globalState, globalActions] = (0, _store["default"])(), {status: status, endpoints: endpoints} = globalState;
-        return globalActions.endpoints.getEndpoints, _react["default"].createElement(_react["default"].Fragment, null, "LOADING" === status && _react["default"].createElement("h4", null, "Loading..."), "SUCCESS" === status && (endpoints => endpoints.map(endpoint => _react["default"].createElement("a", {
+        const [globalState, globalActions] = (0, _store["default"])(), {status: status, endpoints: endpoints, parsed: parsed} = globalState;
+        return _react["default"].createElement(_react["default"].Fragment, null, "LOADING" === status && _react["default"].createElement("h4", null, "Loading..."), "SUCCESS" === status && (endpoints => endpoints.map(endpoint => _react["default"].createElement("a", {
             key: endpoint.name,
-            href: endpoint.sampleUrl,
+            href: endpoint.exampleCall,
             target: "_blank",
             rel: "noopener noreferrer"
-        }, _react["default"].createElement("h3", null, endpoint.name))))(endpoints), "EMPTY" === status && _react["default"].createElement("h4", null, "No endpoints found"), "NOT_FOUND" === status && _react["default"].createElement("h4", null, "404 - Not found"), "ERROR" === status && _react["default"].createElement("h4", null, "Connection Error"));
+        }, _react["default"].createElement("h3", null, endpoint.name))))(endpoints), "SUCCESS" === status && _react["default"].createElement("button", {
+            onClick: e => (e => (e.preventDefault(), google.script.run.withSuccessHandler(data => console.log("success")).withFailureHandler(error => alert(error)).setData(parsed)))(e)
+        }, "This work?"), "EMPTY" === status && _react["default"].createElement("h4", null, "No endpoints found"), "NOT_FOUND" === status && _react["default"].createElement("h4", null, "404 - Not found"), "ERROR" === status && _react["default"].createElement("h4", null, "Connection Error"));
     };
     exports["default"] = _default;
 }, function(module, exports, __webpack_require__) {

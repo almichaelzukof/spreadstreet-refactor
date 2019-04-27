@@ -1,8 +1,5 @@
 import React from 'react';
-
 import useGlobal from '../store';
-
-const sheety = 'https://api.sheety.co/7379c3b5-79ee-40f2-8dac-35ad9fb0aa8e';
 
 const mapEndpoints = (endpoints) => {
   return endpoints.map((endpoint) => (
@@ -19,15 +16,20 @@ const mapEndpoints = (endpoints) => {
 
 const Endpoints = () => {
   const [globalState, globalActions] = useGlobal();
-  const {status, endpoints} = globalState;
-  if (status === 'INITIAL') {
-    globalActions.endpoints.getEndpoints(sheety);
-  }
+  const {status, endpoints, parsed} = globalState;
+  const toSheet = (e) => {
+    e.preventDefault();
+    return google.script.run
+        .withSuccessHandler((data) => console.log('success'))
+        .withFailureHandler((error) => alert(error))
+        .setData(parsed);
+  };
 
   return (
     <>
       {status === 'LOADING' && <h4>Loading...</h4>}
       {status === 'SUCCESS' && mapEndpoints(endpoints)}
+      {status === 'SUCCESS' && <button onClick={(e) => toSheet(e)}>This work?</button>}
       {status === 'EMPTY' && <h4>No endpoints found</h4>}
       {status === 'NOT_FOUND' && <h4>404 - Not found</h4>}
       {status === 'ERROR' && <h4>Connection Error</h4>}
