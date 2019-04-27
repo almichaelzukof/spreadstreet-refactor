@@ -17,11 +17,3 @@ export const getEndpoints = async (store, url) => {
     store.setState({status});
   }
 };
-
-// export const toSheet = (e) => {
-//   e.preventDefault();
-//   return google.script.run
-//       .withSuccessHandler((data) => console.log('success'))
-//       .withFailureHandler((error) => alert(error))
-//       .setData(data);
-// };

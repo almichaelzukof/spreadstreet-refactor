@@ -4,6 +4,7 @@ import useGlobalHook from './useGlobalHook';
 import * as actions from '../actions';
 
 const initialState = {
+  stitchUser: null,
   status: 'INITIAL',
   endpoints: [],
   parsed: [],
