@@ -2382,10 +2382,10 @@
             EJSON: extended_json
         }, bson_1 = bson.BSON_INT32_MAX, bson_2 = bson.BSON_INT32_MIN, bson_3 = bson.BSON_INT64_MAX, bson_4 = bson.BSON_INT64_MIN, bson_5 = bson.JS_INT_MAX, bson_6 = bson.JS_INT_MIN, bson_7 = bson.BSON_DATA_NUMBER, bson_8 = bson.BSON_DATA_STRING, bson_9 = bson.BSON_DATA_OBJECT, bson_10 = bson.BSON_DATA_ARRAY, bson_11 = bson.BSON_DATA_BINARY, bson_12 = bson.BSON_DATA_UNDEFINED, bson_13 = bson.BSON_DATA_OID, bson_14 = bson.BSON_DATA_BOOLEAN, bson_15 = bson.BSON_DATA_DATE, bson_16 = bson.BSON_DATA_NULL, bson_17 = bson.BSON_DATA_REGEXP, bson_18 = bson.BSON_DATA_DBPOINTER, bson_19 = bson.BSON_DATA_CODE, bson_20 = bson.BSON_DATA_SYMBOL, bson_21 = bson.BSON_DATA_CODE_W_SCOPE, bson_22 = bson.BSON_DATA_INT, bson_23 = bson.BSON_DATA_TIMESTAMP, bson_24 = bson.BSON_DATA_LONG, bson_25 = bson.BSON_DATA_DECIMAL128, bson_26 = bson.BSON_DATA_MIN_KEY, bson_27 = bson.BSON_DATA_MAX_KEY, bson_28 = bson.BSON_BINARY_SUBTYPE_DEFAULT, bson_29 = bson.BSON_BINARY_SUBTYPE_FUNCTION, bson_30 = bson.BSON_BINARY_SUBTYPE_BYTE_ARRAY, bson_31 = bson.BSON_BINARY_SUBTYPE_UUID, bson_32 = bson.BSON_BINARY_SUBTYPE_MD5, bson_33 = bson.BSON_BINARY_SUBTYPE_USER_DEFINED, bson_34 = bson.Code, bson_35 = bson.BSONSymbol, bson_36 = bson.DBRef, bson_37 = bson.Binary, bson_38 = bson.ObjectId, bson_39 = bson.Long, bson_40 = bson.Timestamp, bson_41 = bson.Double, bson_42 = bson.Int32, bson_43 = bson.MinKey, bson_44 = bson.MaxKey, bson_45 = bson.BSONRegExp, bson_46 = bson.Decimal128, bson_47 = bson.serialize, bson_48 = bson.serializeWithBufferAndIndex, bson_49 = bson.deserialize, bson_50 = bson.calculateObjectSize, bson_51 = bson.deserializeStream, bson_52 = bson.setInternalBufferSize, bson_53 = bson.ObjectID, bson_54 = bson.EJSON;
         __webpack_exports__["b"] = bson;
-    }).call(this, __webpack_require__(8), __webpack_require__(4).Buffer);
+    }).call(this, __webpack_require__(9), __webpack_require__(4).Buffer);
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var bind = __webpack_require__(13), isBuffer = __webpack_require__(36), toString = Object.prototype.toString;
+    var bind = __webpack_require__(14), isBuffer = __webpack_require__(36), toString = Object.prototype.toString;
     function isArray(val) {
         return "[object Array]" === toString.call(val);
     }
@@ -2465,7 +2465,7 @@
 }, function(module, exports, __webpack_require__) {
     "use strict";
     (function(global) {
-        var base64 = __webpack_require__(7), ieee754 = __webpack_require__(27), isArray = __webpack_require__(28);
+        var base64 = __webpack_require__(8), ieee754 = __webpack_require__(27), isArray = __webpack_require__(28);
         function kMaxLength() {
             return Buffer.TYPED_ARRAY_SUPPORT ? 2147483647 : 1073741823;
         }
@@ -3149,7 +3149,7 @@
             for (var i = 0; i < length && !(i + offset >= dst.length || i >= src.length); ++i) dst[i + offset] = src[i];
             return i;
         }
-    }).call(this, __webpack_require__(8));
+    }).call(this, __webpack_require__(9));
 }, function(module, exports) {
     module.exports = Long;
     var wasm = null;
@@ -3415,366 +3415,6 @@
         } ]
     }, actions);
     exports["default"] = _default;
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    exports.byteLength = function(b64) {
-        var lens = getLens(b64), validLen = lens[0], placeHoldersLen = lens[1];
-        return 3 * (validLen + placeHoldersLen) / 4 - placeHoldersLen;
-    }, exports.toByteArray = function(b64) {
-        for (var tmp, lens = getLens(b64), validLen = lens[0], placeHoldersLen = lens[1], arr = new Arr(function(b64, validLen, placeHoldersLen) {
-            return 3 * (validLen + placeHoldersLen) / 4 - placeHoldersLen;
-        }(0, validLen, placeHoldersLen)), curByte = 0, len = placeHoldersLen > 0 ? validLen - 4 : validLen, i = 0; i < len; i += 4) tmp = revLookup[b64.charCodeAt(i)] << 18 | revLookup[b64.charCodeAt(i + 1)] << 12 | revLookup[b64.charCodeAt(i + 2)] << 6 | revLookup[b64.charCodeAt(i + 3)], 
-        arr[curByte++] = tmp >> 16 & 255, arr[curByte++] = tmp >> 8 & 255, arr[curByte++] = 255 & tmp;
-        2 === placeHoldersLen && (tmp = revLookup[b64.charCodeAt(i)] << 2 | revLookup[b64.charCodeAt(i + 1)] >> 4, 
-        arr[curByte++] = 255 & tmp);
-        1 === placeHoldersLen && (tmp = revLookup[b64.charCodeAt(i)] << 10 | revLookup[b64.charCodeAt(i + 1)] << 4 | revLookup[b64.charCodeAt(i + 2)] >> 2, 
-        arr[curByte++] = tmp >> 8 & 255, arr[curByte++] = 255 & tmp);
-        return arr;
-    }, exports.fromByteArray = function(uint8) {
-        for (var tmp, len = uint8.length, extraBytes = len % 3, parts = [], i = 0, len2 = len - extraBytes; i < len2; i += 16383) parts.push(encodeChunk(uint8, i, i + 16383 > len2 ? len2 : i + 16383));
-        1 === extraBytes ? (tmp = uint8[len - 1], parts.push(lookup[tmp >> 2] + lookup[tmp << 4 & 63] + "==")) : 2 === extraBytes && (tmp = (uint8[len - 2] << 8) + uint8[len - 1], 
-        parts.push(lookup[tmp >> 10] + lookup[tmp >> 4 & 63] + lookup[tmp << 2 & 63] + "="));
-        return parts.join("");
-    };
-    for (var lookup = [], revLookup = [], Arr = "undefined" != typeof Uint8Array ? Uint8Array : Array, code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", i = 0, len = code.length; i < len; ++i) lookup[i] = code[i], 
-    revLookup[code.charCodeAt(i)] = i;
-    function getLens(b64) {
-        var len = b64.length;
-        if (len % 4 > 0) throw new Error("Invalid string. Length must be a multiple of 4");
-        var validLen = b64.indexOf("=");
-        return -1 === validLen && (validLen = len), [ validLen, validLen === len ? 0 : 4 - validLen % 4 ];
-    }
-    function encodeChunk(uint8, start, end) {
-        for (var tmp, num, output = [], i = start; i < end; i += 3) tmp = (uint8[i] << 16 & 16711680) + (uint8[i + 1] << 8 & 65280) + (255 & uint8[i + 2]), 
-        output.push(lookup[(num = tmp) >> 18 & 63] + lookup[num >> 12 & 63] + lookup[num >> 6 & 63] + lookup[63 & num]);
-        return output.join("");
-    }
-    revLookup["-".charCodeAt(0)] = 62, revLookup["_".charCodeAt(0)] = 63;
-}, function(module, exports) {
-    var g;
-    g = function() {
-        return this;
-    }();
-    try {
-        g = g || new Function("return this")();
-    } catch (e) {
-        "object" == typeof window && (g = window);
-    }
-    module.exports = g;
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    (function(process) {
-        var utils = __webpack_require__(1), normalizeHeaderName = __webpack_require__(38), DEFAULT_CONTENT_TYPE = {
-            "Content-Type": "application/x-www-form-urlencoded"
-        };
-        function setContentTypeIfUnset(headers, value) {
-            !utils.isUndefined(headers) && utils.isUndefined(headers["Content-Type"]) && (headers["Content-Type"] = value);
-        }
-        var adapter, defaults = {
-            adapter: ("undefined" != typeof XMLHttpRequest ? adapter = __webpack_require__(14) : void 0 !== process && (adapter = __webpack_require__(14)), 
-            adapter),
-            transformRequest: [ function(data, headers) {
-                return normalizeHeaderName(headers, "Content-Type"), utils.isFormData(data) || utils.isArrayBuffer(data) || utils.isBuffer(data) || utils.isStream(data) || utils.isFile(data) || utils.isBlob(data) ? data : utils.isArrayBufferView(data) ? data.buffer : utils.isURLSearchParams(data) ? (setContentTypeIfUnset(headers, "application/x-www-form-urlencoded;charset=utf-8"), 
-                data.toString()) : utils.isObject(data) ? (setContentTypeIfUnset(headers, "application/json;charset=utf-8"), 
-                JSON.stringify(data)) : data;
-            } ],
-            transformResponse: [ function(data) {
-                if ("string" == typeof data) try {
-                    data = JSON.parse(data);
-                } catch (e) {}
-                return data;
-            } ],
-            timeout: 0,
-            xsrfCookieName: "XSRF-TOKEN",
-            xsrfHeaderName: "X-XSRF-TOKEN",
-            maxContentLength: -1,
-            validateStatus: function(status) {
-                return status >= 200 && status < 300;
-            }
-        };
-        defaults.headers = {
-            common: {
-                Accept: "application/json, text/plain, */*"
-            }
-        }, utils.forEach([ "delete", "get", "head" ], function(method) {
-            defaults.headers[method] = {};
-        }), utils.forEach([ "post", "put", "patch" ], function(method) {
-            defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-        }), module.exports = defaults;
-    }).call(this, __webpack_require__(11));
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var getOwnPropertySymbols = Object.getOwnPropertySymbols, hasOwnProperty = Object.prototype.hasOwnProperty, propIsEnumerable = Object.prototype.propertyIsEnumerable;
-    module.exports = function() {
-        try {
-            if (!Object.assign) return !1;
-            var test1 = new String("abc");
-            if (test1[5] = "de", "5" === Object.getOwnPropertyNames(test1)[0]) return !1;
-            for (var test2 = {}, i = 0; i < 10; i++) test2["_" + String.fromCharCode(i)] = i;
-            if ("0123456789" !== Object.getOwnPropertyNames(test2).map(function(n) {
-                return test2[n];
-            }).join("")) return !1;
-            var test3 = {};
-            return "abcdefghijklmnopqrst".split("").forEach(function(letter) {
-                test3[letter] = letter;
-            }), "abcdefghijklmnopqrst" === Object.keys(Object.assign({}, test3)).join("");
-        } catch (err) {
-            return !1;
-        }
-    }() ? Object.assign : function(target, source) {
-        for (var from, symbols, to = function(val) {
-            if (null === val || val === undefined) throw new TypeError("Object.assign cannot be called with null or undefined");
-            return Object(val);
-        }(target), s = 1; s < arguments.length; s++) {
-            for (var key in from = Object(arguments[s])) hasOwnProperty.call(from, key) && (to[key] = from[key]);
-            if (getOwnPropertySymbols) {
-                symbols = getOwnPropertySymbols(from);
-                for (var i = 0; i < symbols.length; i++) propIsEnumerable.call(from, symbols[i]) && (to[symbols[i]] = from[symbols[i]]);
-            }
-        }
-        return to;
-    };
-}, function(module, exports) {
-    var cachedSetTimeout, cachedClearTimeout, process = module.exports = {};
-    function defaultSetTimout() {
-        throw new Error("setTimeout has not been defined");
-    }
-    function defaultClearTimeout() {
-        throw new Error("clearTimeout has not been defined");
-    }
-    function runTimeout(fun) {
-        if (cachedSetTimeout === setTimeout) return setTimeout(fun, 0);
-        if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) return cachedSetTimeout = setTimeout, 
-        setTimeout(fun, 0);
-        try {
-            return cachedSetTimeout(fun, 0);
-        } catch (e) {
-            try {
-                return cachedSetTimeout.call(null, fun, 0);
-            } catch (e) {
-                return cachedSetTimeout.call(this, fun, 0);
-            }
-        }
-    }
-    !function() {
-        try {
-            cachedSetTimeout = "function" == typeof setTimeout ? setTimeout : defaultSetTimout;
-        } catch (e) {
-            cachedSetTimeout = defaultSetTimout;
-        }
-        try {
-            cachedClearTimeout = "function" == typeof clearTimeout ? clearTimeout : defaultClearTimeout;
-        } catch (e) {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    }();
-    var currentQueue, queue = [], draining = !1, queueIndex = -1;
-    function cleanUpNextTick() {
-        draining && currentQueue && (draining = !1, currentQueue.length ? queue = currentQueue.concat(queue) : queueIndex = -1, 
-        queue.length && drainQueue());
-    }
-    function drainQueue() {
-        if (!draining) {
-            var timeout = runTimeout(cleanUpNextTick);
-            draining = !0;
-            for (var len = queue.length; len; ) {
-                for (currentQueue = queue, queue = []; ++queueIndex < len; ) currentQueue && currentQueue[queueIndex].run();
-                queueIndex = -1, len = queue.length;
-            }
-            currentQueue = null, draining = !1, function(marker) {
-                if (cachedClearTimeout === clearTimeout) return clearTimeout(marker);
-                if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) return cachedClearTimeout = clearTimeout, 
-                clearTimeout(marker);
-                try {
-                    cachedClearTimeout(marker);
-                } catch (e) {
-                    try {
-                        return cachedClearTimeout.call(null, marker);
-                    } catch (e) {
-                        return cachedClearTimeout.call(this, marker);
-                    }
-                }
-            }(timeout);
-        }
-    }
-    function Item(fun, array) {
-        this.fun = fun, this.array = array;
-    }
-    function noop() {}
-    process.nextTick = function(fun) {
-        var args = new Array(arguments.length - 1);
-        if (arguments.length > 1) for (var i = 1; i < arguments.length; i++) args[i - 1] = arguments[i];
-        queue.push(new Item(fun, args)), 1 !== queue.length || draining || runTimeout(drainQueue);
-    }, Item.prototype.run = function() {
-        this.fun.apply(null, this.array);
-    }, process.title = "browser", process.browser = !0, process.env = {}, process.argv = [], 
-    process.version = "", process.versions = {}, process.on = noop, process.addListener = noop, 
-    process.once = noop, process.off = noop, process.removeListener = noop, process.removeAllListeners = noop, 
-    process.emit = noop, process.prependListener = noop, process.prependOnceListener = noop, 
-    process.listeners = function(name) {
-        return [];
-    }, process.binding = function(name) {
-        throw new Error("process.binding is not supported");
-    }, process.cwd = function() {
-        return "/";
-    }, process.chdir = function(dir) {
-        throw new Error("process.chdir is not supported");
-    }, process.umask = function() {
-        return 0;
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-        value: !0
-    }), exports["default"] = App;
-    var _react = function(obj) {
-        if (obj && obj.__esModule) return obj;
-        var newObj = {};
-        if (null != obj) for (var key in obj) if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {};
-            desc.get || desc.set ? Object.defineProperty(newObj, key, desc) : newObj[key] = obj[key];
-        }
-        return newObj["default"] = obj, newObj;
-    }(__webpack_require__(2)), _Navbar = _interopRequireDefault(__webpack_require__(30)), _propTypes = _interopRequireDefault(__webpack_require__(3)), _store = _interopRequireDefault(__webpack_require__(6)), _Endpoints = _interopRequireDefault(__webpack_require__(59));
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            "default": obj
-        };
-    }
-    App.propTypes = {
-        children: _propTypes["default"].node
-    };
-    const sheety = "https://api.sheety.co/7379c3b5-79ee-40f2-8dac-35ad9fb0aa8e";
-    function App(props) {
-        const [globalState, globalActions] = (0, _store["default"])(), {status: status} = globalState;
-        return "INITIAL" === status && globalActions.endpoints.getEndpoints(sheety), console.log(globalState), 
-        _react["default"].createElement("div", {
-            className: "container mx-auto"
-        }, _react["default"].createElement(_Navbar["default"], null), _react["default"].createElement(_Endpoints["default"], null));
-    }
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    module.exports = function(fn, thisArg) {
-        return function() {
-            for (var args = new Array(arguments.length), i = 0; i < args.length; i++) args[i] = arguments[i];
-            return fn.apply(thisArg, args);
-        };
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils = __webpack_require__(1), settle = __webpack_require__(39), buildURL = __webpack_require__(41), parseHeaders = __webpack_require__(42), isURLSameOrigin = __webpack_require__(43), createError = __webpack_require__(15), btoa = "undefined" != typeof window && window.btoa && window.btoa.bind(window) || __webpack_require__(44);
-    module.exports = function(config) {
-        return new Promise(function(resolve, reject) {
-            var requestData = config.data, requestHeaders = config.headers;
-            utils.isFormData(requestData) && delete requestHeaders["Content-Type"];
-            var request = new XMLHttpRequest(), loadEvent = "onreadystatechange", xDomain = !1;
-            if ("undefined" == typeof window || !window.XDomainRequest || "withCredentials" in request || isURLSameOrigin(config.url) || (request = new window.XDomainRequest(), 
-            loadEvent = "onload", xDomain = !0, request.onprogress = function() {}, request.ontimeout = function() {}), 
-            config.auth) {
-                var username = config.auth.username || "", password = config.auth.password || "";
-                requestHeaders.Authorization = "Basic " + btoa(username + ":" + password);
-            }
-            if (request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), !0), 
-            request.timeout = config.timeout, request[loadEvent] = function() {
-                if (request && (4 === request.readyState || xDomain) && (0 !== request.status || request.responseURL && 0 === request.responseURL.indexOf("file:"))) {
-                    var responseHeaders = "getAllResponseHeaders" in request ? parseHeaders(request.getAllResponseHeaders()) : null, response = {
-                        data: config.responseType && "text" !== config.responseType ? request.response : request.responseText,
-                        status: 1223 === request.status ? 204 : request.status,
-                        statusText: 1223 === request.status ? "No Content" : request.statusText,
-                        headers: responseHeaders,
-                        config: config,
-                        request: request
-                    };
-                    settle(resolve, reject, response), request = null;
-                }
-            }, request.onerror = function() {
-                reject(createError("Network Error", config, null, request)), request = null;
-            }, request.ontimeout = function() {
-                reject(createError("timeout of " + config.timeout + "ms exceeded", config, "ECONNABORTED", request)), 
-                request = null;
-            }, utils.isStandardBrowserEnv()) {
-                var cookies = __webpack_require__(45), xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ? cookies.read(config.xsrfCookieName) : undefined;
-                xsrfValue && (requestHeaders[config.xsrfHeaderName] = xsrfValue);
-            }
-            if ("setRequestHeader" in request && utils.forEach(requestHeaders, function(val, key) {
-                void 0 === requestData && "content-type" === key.toLowerCase() ? delete requestHeaders[key] : request.setRequestHeader(key, val);
-            }), config.withCredentials && (request.withCredentials = !0), config.responseType) try {
-                request.responseType = config.responseType;
-            } catch (e) {
-                if ("json" !== config.responseType) throw e;
-            }
-            "function" == typeof config.onDownloadProgress && request.addEventListener("progress", config.onDownloadProgress), 
-            "function" == typeof config.onUploadProgress && request.upload && request.upload.addEventListener("progress", config.onUploadProgress), 
-            config.cancelToken && config.cancelToken.promise.then(function(cancel) {
-                request && (request.abort(), reject(cancel), request = null);
-            }), requestData === undefined && (requestData = null), request.send(requestData);
-        });
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    var enhanceError = __webpack_require__(40);
-    module.exports = function(message, config, code, request, response) {
-        var error = new Error(message);
-        return enhanceError(error, config, code, request, response);
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    module.exports = function(value) {
-        return !(!value || !value.__CANCEL__);
-    };
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    function Cancel(message) {
-        this.message = message;
-    }
-    Cancel.prototype.toString = function() {
-        return "Cancel" + (this.message ? ": " + this.message : "");
-    }, Cancel.prototype.__CANCEL__ = !0, module.exports = Cancel;
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-        value: !0
-    });
-    var obj, _react = __webpack_require__(2), _react2 = (obj = _react) && obj.__esModule ? obj : {
-        "default": obj
-    };
-    var toTitle = function(error, componentStack) {
-        return error.toString() + "\n\nThis is located at:" + componentStack;
-    }, ErrorBoundaryFallbackComponent = function(_ref) {
-        var componentStack = _ref.componentStack, error = _ref.error;
-        return _react2["default"].createElement("div", {
-            style: style,
-            title: toTitle(error, componentStack)
-        }, _react2["default"].createElement("svg", {
-            style: svgStyle,
-            viewBox: "0 0 24 24",
-            preserveAspectRatio: "xMidYMid"
-        }, _react2["default"].createElement("path", {
-            d: "M20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,\n        12M22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,\n        12M15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11C14.7,11 14,10.3 14,\n        9.5C14,8.7 14.7,8 15.5,8M10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5C7,\n        8.7 7.7,8 8.5,8C9.3,8 10,8.7 10,9.5M12,14C13.75,14 15.29,14.72 16.19,\n        15.81L14.77,17.23C14.32,16.5 13.25,16 12,16C10.75,16 9.68,16.5 9.23,\n        17.23L7.81,15.81C8.71,14.72 10.25,14 12,14Z"
-        })));
-    };
-    ErrorBoundaryFallbackComponent.propTypes = {
-        componentStack: __webpack_require__(3).string.isRequired,
-        error: "function" == typeof Error ? __webpack_require__(3).instanceOf(Error).isRequired : __webpack_require__(3).any.isRequired
-    };
-    var style = {
-        height: "100%",
-        maxHeight: "100vh",
-        width: "100%",
-        maxWidth: "100vw",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        textAlign: "center",
-        backgroundColor: "#C00",
-        color: "#FFF",
-        boxSizing: "border-box",
-        cursor: "help"
-    }, svgStyle = {
-        fill: "currentColor",
-        flex: "1 1 auto"
-    };
-    exports["default"] = ErrorBoundaryFallbackComponent;
 }, function(module, __webpack_exports__, __webpack_require__) {
     "use strict";
     __webpack_require__.r(__webpack_exports__);
@@ -4386,7 +4026,7 @@
             this.authInfo = authInfo, this.providerType = providerType, this.providerName = providerName, 
             this.asLink = asLink;
         };
-    }(), base64_js = __webpack_require__(7);
+    }(), base64_js = __webpack_require__(8);
     function base64Decode(str) {
         var strToDecode, unevenBytes = str.length % 4;
         0 != unevenBytes ? strToDecode = str + "=".repeat(4 - unevenBytes) : strToDecode = str;
@@ -5933,9 +5573,14 @@
             this.clientAppId = clientAppId, this.dataDirectory = dataDirectory, this.localAppName = localAppName, 
             this.localAppVersion = localAppVersion;
         };
-    }(), UserApiKeyAuthProviderClientImpl_extends = (function() {
+    }(), google_GoogleRedirectCredential = (function() {
     }(), function() {
-    }(), undefined && undefined.__extends || function() {
+        return function(redirectUrl, providerName, providerType) {
+            void 0 === providerName && (providerName = google_GoogleAuthProvider.DEFAULT_NAME), 
+            void 0 === providerType && (providerType = google_GoogleAuthProvider.TYPE), this.redirectUrl = redirectUrl, 
+            this.providerName = providerName, this.providerType = providerType;
+        };
+    }()), UserApiKeyAuthProviderClientImpl_extends = undefined && undefined.__extends || function() {
         var extendStatics = Object.setPrototypeOf || {
             __proto__: []
         } instanceof Array && function(d, b) {
@@ -5950,7 +5595,7 @@
             extendStatics(d, b), d.prototype = null === b ? Object.create(b) : (__.prototype = b.prototype, 
             new __());
         };
-    }()), internal_UserApiKeyAuthProviderClientImpl = function(_super) {
+    }(), internal_UserApiKeyAuthProviderClientImpl = function(_super) {
         function UserApiKeyAuthProviderClientImpl(requestClient, routes) {
             return _super.call(this, requestClient, routes) || this;
         }
@@ -7159,6 +6804,14 @@
         return app.auth.loginWithCredential(new anonymous_AnonymousCredential()).then(stitchUser => (console.log("Logged in as Anonymous"), 
         stitchUser));
     }
+    function loginGoogle() {
+        if (!app.auth.isLoggedIn) {
+            const credential = new google_GoogleRedirectCredential();
+            return app.auth.loginWithRedirect(credential);
+        }
+        if (app.auth.hasRedirectResult()) return console.log("we have a redirect result"), 
+        app.auth.handleRedirectResult().then(user => (console.log(user), user));
+    }
     function logoutUser(stitchUser) {
         return app.auth.logoutUserWithId(stitchUser.id);
     }
@@ -7175,11 +6828,375 @@
         return fetchEndpoints;
     }), __webpack_require__.d(__webpack_exports__, "loginAnonymous", function() {
         return loginAnonymous;
+    }), __webpack_require__.d(__webpack_exports__, "loginGoogle", function() {
+        return loginGoogle;
     }), __webpack_require__.d(__webpack_exports__, "isLoggedIn", function() {
         return authentication_isLoggedIn;
     }), __webpack_require__.d(__webpack_exports__, "logoutUser", function() {
         return logoutUser;
     });
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    exports.byteLength = function(b64) {
+        var lens = getLens(b64), validLen = lens[0], placeHoldersLen = lens[1];
+        return 3 * (validLen + placeHoldersLen) / 4 - placeHoldersLen;
+    }, exports.toByteArray = function(b64) {
+        for (var tmp, lens = getLens(b64), validLen = lens[0], placeHoldersLen = lens[1], arr = new Arr(function(b64, validLen, placeHoldersLen) {
+            return 3 * (validLen + placeHoldersLen) / 4 - placeHoldersLen;
+        }(0, validLen, placeHoldersLen)), curByte = 0, len = placeHoldersLen > 0 ? validLen - 4 : validLen, i = 0; i < len; i += 4) tmp = revLookup[b64.charCodeAt(i)] << 18 | revLookup[b64.charCodeAt(i + 1)] << 12 | revLookup[b64.charCodeAt(i + 2)] << 6 | revLookup[b64.charCodeAt(i + 3)], 
+        arr[curByte++] = tmp >> 16 & 255, arr[curByte++] = tmp >> 8 & 255, arr[curByte++] = 255 & tmp;
+        2 === placeHoldersLen && (tmp = revLookup[b64.charCodeAt(i)] << 2 | revLookup[b64.charCodeAt(i + 1)] >> 4, 
+        arr[curByte++] = 255 & tmp);
+        1 === placeHoldersLen && (tmp = revLookup[b64.charCodeAt(i)] << 10 | revLookup[b64.charCodeAt(i + 1)] << 4 | revLookup[b64.charCodeAt(i + 2)] >> 2, 
+        arr[curByte++] = tmp >> 8 & 255, arr[curByte++] = 255 & tmp);
+        return arr;
+    }, exports.fromByteArray = function(uint8) {
+        for (var tmp, len = uint8.length, extraBytes = len % 3, parts = [], i = 0, len2 = len - extraBytes; i < len2; i += 16383) parts.push(encodeChunk(uint8, i, i + 16383 > len2 ? len2 : i + 16383));
+        1 === extraBytes ? (tmp = uint8[len - 1], parts.push(lookup[tmp >> 2] + lookup[tmp << 4 & 63] + "==")) : 2 === extraBytes && (tmp = (uint8[len - 2] << 8) + uint8[len - 1], 
+        parts.push(lookup[tmp >> 10] + lookup[tmp >> 4 & 63] + lookup[tmp << 2 & 63] + "="));
+        return parts.join("");
+    };
+    for (var lookup = [], revLookup = [], Arr = "undefined" != typeof Uint8Array ? Uint8Array : Array, code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", i = 0, len = code.length; i < len; ++i) lookup[i] = code[i], 
+    revLookup[code.charCodeAt(i)] = i;
+    function getLens(b64) {
+        var len = b64.length;
+        if (len % 4 > 0) throw new Error("Invalid string. Length must be a multiple of 4");
+        var validLen = b64.indexOf("=");
+        return -1 === validLen && (validLen = len), [ validLen, validLen === len ? 0 : 4 - validLen % 4 ];
+    }
+    function encodeChunk(uint8, start, end) {
+        for (var tmp, num, output = [], i = start; i < end; i += 3) tmp = (uint8[i] << 16 & 16711680) + (uint8[i + 1] << 8 & 65280) + (255 & uint8[i + 2]), 
+        output.push(lookup[(num = tmp) >> 18 & 63] + lookup[num >> 12 & 63] + lookup[num >> 6 & 63] + lookup[63 & num]);
+        return output.join("");
+    }
+    revLookup["-".charCodeAt(0)] = 62, revLookup["_".charCodeAt(0)] = 63;
+}, function(module, exports) {
+    var g;
+    g = function() {
+        return this;
+    }();
+    try {
+        g = g || new Function("return this")();
+    } catch (e) {
+        "object" == typeof window && (g = window);
+    }
+    module.exports = g;
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    (function(process) {
+        var utils = __webpack_require__(1), normalizeHeaderName = __webpack_require__(38), DEFAULT_CONTENT_TYPE = {
+            "Content-Type": "application/x-www-form-urlencoded"
+        };
+        function setContentTypeIfUnset(headers, value) {
+            !utils.isUndefined(headers) && utils.isUndefined(headers["Content-Type"]) && (headers["Content-Type"] = value);
+        }
+        var adapter, defaults = {
+            adapter: ("undefined" != typeof XMLHttpRequest ? adapter = __webpack_require__(15) : void 0 !== process && (adapter = __webpack_require__(15)), 
+            adapter),
+            transformRequest: [ function(data, headers) {
+                return normalizeHeaderName(headers, "Content-Type"), utils.isFormData(data) || utils.isArrayBuffer(data) || utils.isBuffer(data) || utils.isStream(data) || utils.isFile(data) || utils.isBlob(data) ? data : utils.isArrayBufferView(data) ? data.buffer : utils.isURLSearchParams(data) ? (setContentTypeIfUnset(headers, "application/x-www-form-urlencoded;charset=utf-8"), 
+                data.toString()) : utils.isObject(data) ? (setContentTypeIfUnset(headers, "application/json;charset=utf-8"), 
+                JSON.stringify(data)) : data;
+            } ],
+            transformResponse: [ function(data) {
+                if ("string" == typeof data) try {
+                    data = JSON.parse(data);
+                } catch (e) {}
+                return data;
+            } ],
+            timeout: 0,
+            xsrfCookieName: "XSRF-TOKEN",
+            xsrfHeaderName: "X-XSRF-TOKEN",
+            maxContentLength: -1,
+            validateStatus: function(status) {
+                return status >= 200 && status < 300;
+            }
+        };
+        defaults.headers = {
+            common: {
+                Accept: "application/json, text/plain, */*"
+            }
+        }, utils.forEach([ "delete", "get", "head" ], function(method) {
+            defaults.headers[method] = {};
+        }), utils.forEach([ "post", "put", "patch" ], function(method) {
+            defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+        }), module.exports = defaults;
+    }).call(this, __webpack_require__(12));
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var getOwnPropertySymbols = Object.getOwnPropertySymbols, hasOwnProperty = Object.prototype.hasOwnProperty, propIsEnumerable = Object.prototype.propertyIsEnumerable;
+    module.exports = function() {
+        try {
+            if (!Object.assign) return !1;
+            var test1 = new String("abc");
+            if (test1[5] = "de", "5" === Object.getOwnPropertyNames(test1)[0]) return !1;
+            for (var test2 = {}, i = 0; i < 10; i++) test2["_" + String.fromCharCode(i)] = i;
+            if ("0123456789" !== Object.getOwnPropertyNames(test2).map(function(n) {
+                return test2[n];
+            }).join("")) return !1;
+            var test3 = {};
+            return "abcdefghijklmnopqrst".split("").forEach(function(letter) {
+                test3[letter] = letter;
+            }), "abcdefghijklmnopqrst" === Object.keys(Object.assign({}, test3)).join("");
+        } catch (err) {
+            return !1;
+        }
+    }() ? Object.assign : function(target, source) {
+        for (var from, symbols, to = function(val) {
+            if (null === val || val === undefined) throw new TypeError("Object.assign cannot be called with null or undefined");
+            return Object(val);
+        }(target), s = 1; s < arguments.length; s++) {
+            for (var key in from = Object(arguments[s])) hasOwnProperty.call(from, key) && (to[key] = from[key]);
+            if (getOwnPropertySymbols) {
+                symbols = getOwnPropertySymbols(from);
+                for (var i = 0; i < symbols.length; i++) propIsEnumerable.call(from, symbols[i]) && (to[symbols[i]] = from[symbols[i]]);
+            }
+        }
+        return to;
+    };
+}, function(module, exports) {
+    var cachedSetTimeout, cachedClearTimeout, process = module.exports = {};
+    function defaultSetTimout() {
+        throw new Error("setTimeout has not been defined");
+    }
+    function defaultClearTimeout() {
+        throw new Error("clearTimeout has not been defined");
+    }
+    function runTimeout(fun) {
+        if (cachedSetTimeout === setTimeout) return setTimeout(fun, 0);
+        if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) return cachedSetTimeout = setTimeout, 
+        setTimeout(fun, 0);
+        try {
+            return cachedSetTimeout(fun, 0);
+        } catch (e) {
+            try {
+                return cachedSetTimeout.call(null, fun, 0);
+            } catch (e) {
+                return cachedSetTimeout.call(this, fun, 0);
+            }
+        }
+    }
+    !function() {
+        try {
+            cachedSetTimeout = "function" == typeof setTimeout ? setTimeout : defaultSetTimout;
+        } catch (e) {
+            cachedSetTimeout = defaultSetTimout;
+        }
+        try {
+            cachedClearTimeout = "function" == typeof clearTimeout ? clearTimeout : defaultClearTimeout;
+        } catch (e) {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    }();
+    var currentQueue, queue = [], draining = !1, queueIndex = -1;
+    function cleanUpNextTick() {
+        draining && currentQueue && (draining = !1, currentQueue.length ? queue = currentQueue.concat(queue) : queueIndex = -1, 
+        queue.length && drainQueue());
+    }
+    function drainQueue() {
+        if (!draining) {
+            var timeout = runTimeout(cleanUpNextTick);
+            draining = !0;
+            for (var len = queue.length; len; ) {
+                for (currentQueue = queue, queue = []; ++queueIndex < len; ) currentQueue && currentQueue[queueIndex].run();
+                queueIndex = -1, len = queue.length;
+            }
+            currentQueue = null, draining = !1, function(marker) {
+                if (cachedClearTimeout === clearTimeout) return clearTimeout(marker);
+                if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) return cachedClearTimeout = clearTimeout, 
+                clearTimeout(marker);
+                try {
+                    cachedClearTimeout(marker);
+                } catch (e) {
+                    try {
+                        return cachedClearTimeout.call(null, marker);
+                    } catch (e) {
+                        return cachedClearTimeout.call(this, marker);
+                    }
+                }
+            }(timeout);
+        }
+    }
+    function Item(fun, array) {
+        this.fun = fun, this.array = array;
+    }
+    function noop() {}
+    process.nextTick = function(fun) {
+        var args = new Array(arguments.length - 1);
+        if (arguments.length > 1) for (var i = 1; i < arguments.length; i++) args[i - 1] = arguments[i];
+        queue.push(new Item(fun, args)), 1 !== queue.length || draining || runTimeout(drainQueue);
+    }, Item.prototype.run = function() {
+        this.fun.apply(null, this.array);
+    }, process.title = "browser", process.browser = !0, process.env = {}, process.argv = [], 
+    process.version = "", process.versions = {}, process.on = noop, process.addListener = noop, 
+    process.once = noop, process.off = noop, process.removeListener = noop, process.removeAllListeners = noop, 
+    process.emit = noop, process.prependListener = noop, process.prependOnceListener = noop, 
+    process.listeners = function(name) {
+        return [];
+    }, process.binding = function(name) {
+        throw new Error("process.binding is not supported");
+    }, process.cwd = function() {
+        return "/";
+    }, process.chdir = function(dir) {
+        throw new Error("process.chdir is not supported");
+    }, process.umask = function() {
+        return 0;
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+        value: !0
+    }), exports["default"] = App;
+    var _react = function(obj) {
+        if (obj && obj.__esModule) return obj;
+        var newObj = {};
+        if (null != obj) for (var key in obj) if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {};
+            desc.get || desc.set ? Object.defineProperty(newObj, key, desc) : newObj[key] = obj[key];
+        }
+        return newObj["default"] = obj, newObj;
+    }(__webpack_require__(2)), _stitch = __webpack_require__(7), _Navbar = _interopRequireDefault(__webpack_require__(30)), _propTypes = _interopRequireDefault(__webpack_require__(3)), _store = _interopRequireDefault(__webpack_require__(6)), _Endpoints = _interopRequireDefault(__webpack_require__(59));
+    function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : {
+            "default": obj
+        };
+    }
+    App.propTypes = {
+        children: _propTypes["default"].node
+    };
+    const sheety = "https://api.sheety.co/7379c3b5-79ee-40f2-8dac-35ad9fb0aa8e";
+    function App(props) {
+        const [globalState, globalActions] = (0, _store["default"])(), {status: status} = globalState;
+        return "INITIAL" === status && globalActions.endpoints.getEndpoints(sheety), console.log(globalState), 
+        _react["default"].createElement("div", {
+            className: "container mx-auto"
+        }, _react["default"].createElement(_Navbar["default"], null), _react["default"].createElement(_Endpoints["default"], null), _react["default"].createElement("button", {
+            onClick: () => (0, _stitch.fetchEndpoints)()
+        }, "fetch"));
+    }
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    module.exports = function(fn, thisArg) {
+        return function() {
+            for (var args = new Array(arguments.length), i = 0; i < args.length; i++) args[i] = arguments[i];
+            return fn.apply(thisArg, args);
+        };
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils = __webpack_require__(1), settle = __webpack_require__(39), buildURL = __webpack_require__(41), parseHeaders = __webpack_require__(42), isURLSameOrigin = __webpack_require__(43), createError = __webpack_require__(16), btoa = "undefined" != typeof window && window.btoa && window.btoa.bind(window) || __webpack_require__(44);
+    module.exports = function(config) {
+        return new Promise(function(resolve, reject) {
+            var requestData = config.data, requestHeaders = config.headers;
+            utils.isFormData(requestData) && delete requestHeaders["Content-Type"];
+            var request = new XMLHttpRequest(), loadEvent = "onreadystatechange", xDomain = !1;
+            if ("undefined" == typeof window || !window.XDomainRequest || "withCredentials" in request || isURLSameOrigin(config.url) || (request = new window.XDomainRequest(), 
+            loadEvent = "onload", xDomain = !0, request.onprogress = function() {}, request.ontimeout = function() {}), 
+            config.auth) {
+                var username = config.auth.username || "", password = config.auth.password || "";
+                requestHeaders.Authorization = "Basic " + btoa(username + ":" + password);
+            }
+            if (request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), !0), 
+            request.timeout = config.timeout, request[loadEvent] = function() {
+                if (request && (4 === request.readyState || xDomain) && (0 !== request.status || request.responseURL && 0 === request.responseURL.indexOf("file:"))) {
+                    var responseHeaders = "getAllResponseHeaders" in request ? parseHeaders(request.getAllResponseHeaders()) : null, response = {
+                        data: config.responseType && "text" !== config.responseType ? request.response : request.responseText,
+                        status: 1223 === request.status ? 204 : request.status,
+                        statusText: 1223 === request.status ? "No Content" : request.statusText,
+                        headers: responseHeaders,
+                        config: config,
+                        request: request
+                    };
+                    settle(resolve, reject, response), request = null;
+                }
+            }, request.onerror = function() {
+                reject(createError("Network Error", config, null, request)), request = null;
+            }, request.ontimeout = function() {
+                reject(createError("timeout of " + config.timeout + "ms exceeded", config, "ECONNABORTED", request)), 
+                request = null;
+            }, utils.isStandardBrowserEnv()) {
+                var cookies = __webpack_require__(45), xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ? cookies.read(config.xsrfCookieName) : undefined;
+                xsrfValue && (requestHeaders[config.xsrfHeaderName] = xsrfValue);
+            }
+            if ("setRequestHeader" in request && utils.forEach(requestHeaders, function(val, key) {
+                void 0 === requestData && "content-type" === key.toLowerCase() ? delete requestHeaders[key] : request.setRequestHeader(key, val);
+            }), config.withCredentials && (request.withCredentials = !0), config.responseType) try {
+                request.responseType = config.responseType;
+            } catch (e) {
+                if ("json" !== config.responseType) throw e;
+            }
+            "function" == typeof config.onDownloadProgress && request.addEventListener("progress", config.onDownloadProgress), 
+            "function" == typeof config.onUploadProgress && request.upload && request.upload.addEventListener("progress", config.onUploadProgress), 
+            config.cancelToken && config.cancelToken.promise.then(function(cancel) {
+                request && (request.abort(), reject(cancel), request = null);
+            }), requestData === undefined && (requestData = null), request.send(requestData);
+        });
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    var enhanceError = __webpack_require__(40);
+    module.exports = function(message, config, code, request, response) {
+        var error = new Error(message);
+        return enhanceError(error, config, code, request, response);
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    module.exports = function(value) {
+        return !(!value || !value.__CANCEL__);
+    };
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    function Cancel(message) {
+        this.message = message;
+    }
+    Cancel.prototype.toString = function() {
+        return "Cancel" + (this.message ? ": " + this.message : "");
+    }, Cancel.prototype.__CANCEL__ = !0, module.exports = Cancel;
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+        value: !0
+    });
+    var obj, _react = __webpack_require__(2), _react2 = (obj = _react) && obj.__esModule ? obj : {
+        "default": obj
+    };
+    var toTitle = function(error, componentStack) {
+        return error.toString() + "\n\nThis is located at:" + componentStack;
+    }, ErrorBoundaryFallbackComponent = function(_ref) {
+        var componentStack = _ref.componentStack, error = _ref.error;
+        return _react2["default"].createElement("div", {
+            style: style,
+            title: toTitle(error, componentStack)
+        }, _react2["default"].createElement("svg", {
+            style: svgStyle,
+            viewBox: "0 0 24 24",
+            preserveAspectRatio: "xMidYMid"
+        }, _react2["default"].createElement("path", {
+            d: "M20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,\n        12M22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,\n        12M15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11C14.7,11 14,10.3 14,\n        9.5C14,8.7 14.7,8 15.5,8M10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5C7,\n        8.7 7.7,8 8.5,8C9.3,8 10,8.7 10,9.5M12,14C13.75,14 15.29,14.72 16.19,\n        15.81L14.77,17.23C14.32,16.5 13.25,16 12,16C10.75,16 9.68,16.5 9.23,\n        17.23L7.81,15.81C8.71,14.72 10.25,14 12,14Z"
+        })));
+    };
+    ErrorBoundaryFallbackComponent.propTypes = {
+        componentStack: __webpack_require__(3).string.isRequired,
+        error: "function" == typeof Error ? __webpack_require__(3).instanceOf(Error).isRequired : __webpack_require__(3).any.isRequired
+    };
+    var style = {
+        height: "100%",
+        maxHeight: "100vh",
+        width: "100%",
+        maxWidth: "100vw",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
+        backgroundColor: "#C00",
+        color: "#FFF",
+        boxSizing: "border-box",
+        cursor: "help"
+    }, svgStyle = {
+        fill: "currentColor",
+        flex: "1 1 auto"
+    };
+    exports["default"] = ErrorBoundaryFallbackComponent;
 }, function(module, exports, __webpack_require__) {
     (function(process) {
         function detectOS(userAgentString) {
@@ -7225,10 +7242,10 @@
             getNodeVersion: getNodeVersion,
             parseUserAgent: parseUserAgent
         };
-    }).call(this, __webpack_require__(11));
+    }).call(this, __webpack_require__(12));
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var _react = _interopRequireDefault(__webpack_require__(2)), _reactDom = _interopRequireDefault(__webpack_require__(23)), _stitch = __webpack_require__(19), _LoginAnon = _interopRequireDefault(__webpack_require__(29)), _App = _interopRequireDefault(__webpack_require__(12));
+    var _react = _interopRequireDefault(__webpack_require__(2)), _reactDom = _interopRequireDefault(__webpack_require__(23)), _stitch = __webpack_require__(7), _LoginAnon = _interopRequireDefault(__webpack_require__(29)), _App = _interopRequireDefault(__webpack_require__(13));
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
             "default": obj
@@ -7240,12 +7257,13 @@
         return (0, _stitch.isLoggedIn)() ? _react["default"].createElement(_App["default"], {
             handleLogout: () => (0, _stitch.logoutUser)(_stitch.app.currentUser)
         }) : _react["default"].createElement(_LoginAnon["default"], {
-            loginAnonymous: _stitch.loginAnonymous
+            loginAnonymous: _stitch.loginAnonymous,
+            loginGoogle: _stitch.loginGoogle
         });
     }, null), rootElement);
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var k = __webpack_require__(10), n = "function" == typeof Symbol && Symbol["for"], p = n ? Symbol["for"]("react.element") : 60103, q = n ? Symbol["for"]("react.portal") : 60106, r = n ? Symbol["for"]("react.fragment") : 60107, t = n ? Symbol["for"]("react.strict_mode") : 60108, u = n ? Symbol["for"]("react.profiler") : 60114, v = n ? Symbol["for"]("react.provider") : 60109, w = n ? Symbol["for"]("react.context") : 60110, x = n ? Symbol["for"]("react.concurrent_mode") : 60111, y = n ? Symbol["for"]("react.forward_ref") : 60112, z = n ? Symbol["for"]("react.suspense") : 60113, aa = n ? Symbol["for"]("react.memo") : 60115, ba = n ? Symbol["for"]("react.lazy") : 60116, A = "function" == typeof Symbol && Symbol.iterator;
+    var k = __webpack_require__(11), n = "function" == typeof Symbol && Symbol["for"], p = n ? Symbol["for"]("react.element") : 60103, q = n ? Symbol["for"]("react.portal") : 60106, r = n ? Symbol["for"]("react.fragment") : 60107, t = n ? Symbol["for"]("react.strict_mode") : 60108, u = n ? Symbol["for"]("react.profiler") : 60114, v = n ? Symbol["for"]("react.provider") : 60109, w = n ? Symbol["for"]("react.context") : 60110, x = n ? Symbol["for"]("react.concurrent_mode") : 60111, y = n ? Symbol["for"]("react.forward_ref") : 60112, z = n ? Symbol["for"]("react.suspense") : 60113, aa = n ? Symbol["for"]("react.memo") : 60115, ba = n ? Symbol["for"]("react.lazy") : 60116, A = "function" == typeof Symbol && Symbol.iterator;
     function B(a) {
         for (var b = arguments.length - 1, d = "https://reactjs.org/docs/error-decoder.html?invariant=" + a, c = 0; c < b; c++) d += "&args[]=" + encodeURIComponent(arguments[c + 1]);
         !function(a, b, d, c, e, g, h, f) {
@@ -7548,7 +7566,7 @@
     }(), module.exports = __webpack_require__(24);
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var aa = __webpack_require__(2), n = __webpack_require__(10), r = __webpack_require__(25);
+    var aa = __webpack_require__(2), n = __webpack_require__(11), r = __webpack_require__(25);
     function x(a) {
         for (var b = arguments.length - 1, c = "https://reactjs.org/docs/error-decoder.html?invariant=" + a, d = 0; d < b; d++) c += "&args[]=" + encodeURIComponent(arguments[d + 1]);
         !function(a, b, c, d, e, f, g, h) {
@@ -12212,7 +12230,7 @@
         }, exports.unstable_pauseExecution = function() {}, exports.unstable_getFirstCallbackNode = function() {
             return d;
         };
-    }).call(this, __webpack_require__(8));
+    }).call(this, __webpack_require__(9));
 }, function(module, exports) {
     exports.read = function(buffer, offset, isLE, mLen, nBytes) {
         var e, m, eLen = 8 * nBytes - mLen - 1, eMax = (1 << eLen) - 1, eBias = eMax >> 1, nBits = -7, i = isLE ? nBytes - 1 : 0, d = isLE ? -1 : 1, s = buffer[offset + i];
@@ -12249,24 +12267,21 @@
     }), exports["default"] = function(props) {
         return _react["default"].createElement(_reactErrorBoundary["default"], null, _react["default"].createElement(LoginForm, props));
     }, exports.LoginForm = LoginForm;
-    var _react = _interopRequireDefault(__webpack_require__(2)), _App = _interopRequireDefault(__webpack_require__(12)), _reactErrorBoundary = _interopRequireDefault(__webpack_require__(60)), _store = _interopRequireDefault(__webpack_require__(6));
+    var _react = _interopRequireDefault(__webpack_require__(2)), _App = _interopRequireDefault(__webpack_require__(13)), _reactErrorBoundary = _interopRequireDefault(__webpack_require__(60)), _stitch = __webpack_require__(7), _store = _interopRequireDefault(__webpack_require__(6));
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
             "default": obj
         };
     }
     function LoginForm(props) {
-        const [globalState, globalActions] = (0, _store["default"])(), {stitchUser: stitchUser} = globalState, {loginAnonymous: loginAnonymous} = props;
-        return stitchUser ? _react["default"].createElement(_App["default"], null) : _react["default"].createElement("div", {
-            inverse: !0,
-            color: "dark"
-        }, _react["default"].createElement("button", {
-            onClick: () => {
-                loginAnonymous().then(stitchUser => {
-                    globalActions.auth.setStitchUser(stitchUser);
-                });
-            }
-        }, "Log in as Anonymous"));
+        const [globalState, globalActions] = (0, _store["default"])(), {stitchUser: stitchUser} = globalState, {loginGoogle: loginGoogle} = props;
+        return _stitch.app.auth.hasRedirectResult() && (console.log("we have a redirect result"), 
+        _stitch.app.auth.handleRedirectResult().then(stitchUser => {
+            console.log(stitchUser), globalActions.auth.setStitchUser(stitchUser);
+        })), stitchUser ? _react["default"].createElement(_App["default"], null) : _react["default"].createElement("div", null, _react["default"].createElement("button", {
+            className: "btn btn-green",
+            onClick: () => loginGoogle()
+        }, "Log in Google"));
     }
 }, function(module, exports, __webpack_require__) {
     "use strict";
@@ -12281,7 +12296,7 @@
             desc.get || desc.set ? Object.defineProperty(newObj, key, desc) : newObj[key] = obj[key];
         }
         return newObj["default"] = obj, newObj;
-    }(__webpack_require__(2)), _stitch = __webpack_require__(19), _store = (obj = __webpack_require__(6)) && obj.__esModule ? obj : {
+    }(__webpack_require__(2)), _stitch = __webpack_require__(7), _store = (obj = __webpack_require__(6)) && obj.__esModule ? obj : {
         "default": obj
     };
     const LogoutButton = () => _react["default"].createElement("button", {
@@ -12382,7 +12397,7 @@
     module.exports = __webpack_require__(35);
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var utils = __webpack_require__(1), bind = __webpack_require__(13), Axios = __webpack_require__(37), defaults = __webpack_require__(9);
+    var utils = __webpack_require__(1), bind = __webpack_require__(14), Axios = __webpack_require__(37), defaults = __webpack_require__(10);
     function createInstance(defaultConfig) {
         var context = new Axios(defaultConfig), instance = bind(Axios.prototype.request, context);
         return utils.extend(instance, Axios.prototype, context), utils.extend(instance, context), 
@@ -12391,8 +12406,8 @@
     var axios = createInstance(defaults);
     axios.Axios = Axios, axios.create = function(instanceConfig) {
         return createInstance(utils.merge(defaults, instanceConfig));
-    }, axios.Cancel = __webpack_require__(17), axios.CancelToken = __webpack_require__(51), 
-    axios.isCancel = __webpack_require__(16), axios.all = function(promises) {
+    }, axios.Cancel = __webpack_require__(18), axios.CancelToken = __webpack_require__(51), 
+    axios.isCancel = __webpack_require__(17), axios.all = function(promises) {
         return Promise.all(promises);
     }, axios.spread = __webpack_require__(52), module.exports = axios, module.exports["default"] = axios;
 }, function(module, exports) {
@@ -12406,7 +12421,7 @@
     };
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var defaults = __webpack_require__(9), utils = __webpack_require__(1), InterceptorManager = __webpack_require__(46), dispatchRequest = __webpack_require__(47);
+    var defaults = __webpack_require__(10), utils = __webpack_require__(1), InterceptorManager = __webpack_require__(46), dispatchRequest = __webpack_require__(47);
     function Axios(instanceConfig) {
         this.defaults = instanceConfig, this.interceptors = {
             request: new InterceptorManager(),
@@ -12453,7 +12468,7 @@
     };
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var createError = __webpack_require__(15);
+    var createError = __webpack_require__(16);
     module.exports = function(resolve, reject, response) {
         var validateStatus = response.config.validateStatus;
         response.status && validateStatus && !validateStatus(response.status) ? reject(createError("Request failed with status code " + response.status, response.config, null, response.request, response)) : resolve(response);
@@ -12583,7 +12598,7 @@
     }, module.exports = InterceptorManager;
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var utils = __webpack_require__(1), transformData = __webpack_require__(48), isCancel = __webpack_require__(16), defaults = __webpack_require__(9), isAbsoluteURL = __webpack_require__(49), combineURLs = __webpack_require__(50);
+    var utils = __webpack_require__(1), transformData = __webpack_require__(48), isCancel = __webpack_require__(17), defaults = __webpack_require__(10), isAbsoluteURL = __webpack_require__(49), combineURLs = __webpack_require__(50);
     function throwIfCancellationRequested(config) {
         config.cancelToken && config.cancelToken.throwIfRequested();
     }
@@ -12621,7 +12636,7 @@
     };
 }, function(module, exports, __webpack_require__) {
     "use strict";
-    var Cancel = __webpack_require__(17);
+    var Cancel = __webpack_require__(18);
     function CancelToken(executor) {
         if ("function" != typeof executor) throw new TypeError("executor must be a function.");
         var resolvePromise;
@@ -13367,7 +13382,7 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports.ErrorBoundaryFallbackComponent = exports.withErrorBoundary = exports.ErrorBoundary = undefined;
-    var _ErrorBoundaryFallbackComponent2 = _interopRequireDefault(__webpack_require__(18)), _ErrorBoundary = __webpack_require__(61), _ErrorBoundary2 = _interopRequireDefault(_ErrorBoundary);
+    var _ErrorBoundaryFallbackComponent2 = _interopRequireDefault(__webpack_require__(19)), _ErrorBoundary = __webpack_require__(61), _ErrorBoundary2 = _interopRequireDefault(_ErrorBoundary);
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
             "default": obj
@@ -13392,7 +13407,7 @@
             return protoProps && defineProperties(Constructor.prototype, protoProps), staticProps && defineProperties(Constructor, staticProps), 
             Constructor;
         };
-    }(), _react = __webpack_require__(2), _react2 = _interopRequireDefault(_react), _ErrorBoundaryFallbackComponent2 = _interopRequireDefault(__webpack_require__(18));
+    }(), _react = __webpack_require__(2), _react2 = _interopRequireDefault(_react), _ErrorBoundaryFallbackComponent2 = _interopRequireDefault(__webpack_require__(19));
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
             "default": obj

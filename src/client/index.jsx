@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {app,
   isLoggedIn,
   loginAnonymous,
+  loginGoogle,
   logoutUser,
 } from './stitch';
 import LoginAnon from './components/LoginAnon';
@@ -14,7 +15,7 @@ function MyApp(props) {
   return isLoggedIn() ? (
     <App handleLogout={() => logoutUser(app.currentUser)} />
   ) : (
-    <LoginAnon loginAnonymous={loginAnonymous} />
+    <LoginAnon loginAnonymous={loginAnonymous} loginGoogle={loginGoogle}/>
   );
 }
 

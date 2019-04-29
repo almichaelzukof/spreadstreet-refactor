@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {fetchEndpoints} from './../stitch';
+import {fetchEndpoints, isLoggedIn} from './../stitch';
 import Navbar from './Navbar';
 import PropTypes from 'prop-types';
 

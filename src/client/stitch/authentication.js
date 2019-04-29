@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {UserPasswordCredential, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
+import {UserPasswordCredential, AnonymousCredential, GoogleRedirectCredential} from 'mongodb-stitch-browser-sdk';
 import {app} from './stitch.js';
 
 // Log in a user with the specified email and password
@@ -24,6 +24,20 @@ export function loginAnonymous() {
         console.log(`Logged in as Anonymous`);
         return stitchUser;
       });
+}
+
+export function loginGoogle() {
+  if (!app.auth.isLoggedIn) {
+    const credential = new GoogleRedirectCredential();
+    return app.auth.loginWithRedirect(credential);
+  }
+  if (app.auth.hasRedirectResult()) {
+    console.log('we have a redirect result');
+    return app.auth.handleRedirectResult().then((user) => {
+      console.log(user);
+      return user;
+    });
+  }
 }
 
 export function hasLoggedInUser() {
