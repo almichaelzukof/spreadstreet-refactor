@@ -94,7 +94,7 @@ const clientConfig = Object.assign({}, sharedConfigSettings, {
   },
   plugins: [
     htmlPlugin,
-    new HtmlWebpackInlineSourcePlugin()
+    htmlWebpackInlineSourcePlugin
   ]
 });
 

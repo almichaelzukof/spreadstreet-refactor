@@ -1,9 +1,12 @@
 import React from 'react';
 import App from './App';
 import ErrorBoundary from 'react-error-boundary';
+import {required, nonEmpty, email} from '../utils/validators';
 import {app} from '../stitch';
 
 import useGlobal from '../store';
+import RenderField from './Input/RenderField';
+import Login from './Login/Login';
 
 export default function LoginAnon(props) {
   return (
@@ -32,9 +35,7 @@ export function LoginForm(props) {
           <img src='https://d33wubrfki0l68.cloudfront.net/cd8037bd6ee2c6e2bed98237fa97a0364e60153b/7ace2/img/sslogoclear.png' alt='Spreadstreet logo' />
           <h1 className='text-center mt-16'>Spreadstreet</h1>
         </header>
-        <button onClick={() => loginGoogle()} className="bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 border-b-4 border-blue-dark hover:border-blue rounded">
-        Login with Google
-        </button>
+        <Login />
       </div>
     </div>
   );
