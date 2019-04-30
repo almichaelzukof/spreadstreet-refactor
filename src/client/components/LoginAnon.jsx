@@ -1,8 +1,9 @@
 import React from 'react';
 import App from './App';
+import Icon from './Icons/Index';
 import ErrorBoundary from 'react-error-boundary';
-import {required, nonEmpty, email} from '../utils/validators';
 import {app} from '../stitch';
+import {CustomCredential} from 'mongodb-stitch-browser-sdk';
 
 import useGlobal from '../store';
 import RenderField from './Input/RenderField';
@@ -19,25 +20,38 @@ export default function LoginAnon(props) {
 export function LoginForm(props) {
   const [globalState, globalActions] = useGlobal();
   const {stitchUser} = globalState;
-  const {loginGoogle} = props;
-  if (app.auth.hasRedirectResult()) {
-    console.log('we have a redirect result');
-    app.auth.handleRedirectResult().then((stitchUser) => {
-      console.log(stitchUser);
-      globalActions.auth.setStitchUser(stitchUser);
-    });
-  }
+  const jwtString = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoidXNlcm5hbWU5MDAwQHVzZXJycm5hbWUuY29tIiwidXNlcm5hbWUiOiIwbzk5cHJ0NWRmM2xxY3RtbHZ4N25jIiwiY3JlYXRlZEF0IjoiMjAxOS0wNC0zMFQxNjowMDozMS4wMjdaIiwidXBkYXRlZEF0IjoiMjAxOS0wNC0zMFQxNjowMDozMS4wMjdaIiwiaWQiOiI1Y2M4NzExZjNiNjY5ZTQ5MDg5OTE3MTQifSwiaWF0IjoxNTU2NjQyMTQwLCJleHAiOjE1NTcyNDY5NDAsImF1ZCI6ImFwaS1odWItYmVic2YiLCJzdWIiOiJ1c2VybmFtZTkwMDBAdXNlcnJybmFtZS5jb20ifQ.tNUMU4FTdpAYf6VLWTVF2FekX75kNTrYkArO_a_6x5Y';
+
+  const credential = new CustomCredential(jwtString);
+
+  app.auth.loginWithCredential(credential)
+      .then((authedUser) => console.log(`logged in with custom auth as user ${authedUser.id}`))
+      .catch( (err) => console.error(`failed to log in with custom auth: ${err}`));
 
   return stitchUser ? <App /> : (
-    <div className='container mx-auto'>
-      <div className='flex flex-col content-center items-center h-screen justify-center'>
-        <header className=''>
-          <img src='https://d33wubrfki0l68.cloudfront.net/cd8037bd6ee2c6e2bed98237fa97a0364e60153b/7ace2/img/sslogoclear.png' alt='Spreadstreet logo' />
-          <h1 className='text-center mt-16'>Spreadstreet</h1>
-        </header>
-        <Login />
+    <section className='h-screen w-screen flex sm:pt-8 md:pt-12 lg:pt-20 lg:cover-background m-4'>
+      <div className='container mx-auto'>
+        <div className='flex flex-col md:flex-row'>
+          <div className="flex flex-col mb-6 md:w-1/2">
+            <div className="block mb-4">
+              <Icon name="logo" className="fill-current w-8 h-8 text-grey-darker float-left" />
+              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-grey-darker">
+                Spreadstreet
+              </p>
+            </div>
+            <div className="mb-12">
+              <h1 className="font-semibold text-grey-darkest text-4xl sm:text-5xl md:text-6xl mb-4 leading-none">
+                API Data in Google Sheets
+              </h1>
+              <p className="text-xl sm:text-2xl text-grey-darkest leading-normal max-w-lg">
+              Spreadstreet is the easy way to get cryptocurrency data directly into Google Sheets.
+              </p>
+            </div>
+            <Login />
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 

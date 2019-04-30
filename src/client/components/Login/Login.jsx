@@ -42,24 +42,6 @@ export default function Login() {
     >
       {(props) => (
         <Form>
-          {/* <label htmlFor="email">Email</label>
-          <div>
-            <input
-              name="email"
-              type="email"
-              placeholder="Enter your account email"
-              value={props.values.email}
-              onChange={props.handleChange}
-              onBlur={props.handleBlur}
-              style={{
-                borderColor:
-              props.errors.email && props.touched.email && 'red',
-              }}
-            />
-            {props.errors.email && props.touched.email && (
-              <div style={{color: 'red'}}>{props.errors.email}</div>
-            )}
-          </div> */}
           <RenderField
             name="email"
             type="email"
@@ -70,24 +52,6 @@ export default function Login() {
             touched={props.touched.email}
             error={props.errors.email}
           />
-          {/* <label htmlFor="password">Password</label>
-          <div>
-            <input
-              name="password"
-              type="password"
-              placeholder="Enter your account password"
-              value={props.values.password}
-              onChange={props.handleChange}
-              onBlur={props.handleBlur}
-              style={{
-                borderColor:
-              props.errors.password && props.touched.password && 'red',
-              }}
-            />
-            {props.errors.password && props.touched.password && (
-              <div style={{color: 'red'}}>{props.errors.password}</div>
-            )}
-          </div> */}
           <RenderField
             name="password"
             type="password"
@@ -98,19 +62,20 @@ export default function Login() {
             touched={props.touched.password}
             error={props.errors.password}
           />
-          <input
-            type="submit"
-            value="Submit"
-            disabled={props.isSubmitting}
-            className="bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 border-b-4 border-blue-dark hover:border-blue rounded"
-          />
-      &nbsp;
-          <input
-            type="reset"
-            value="Reset"
-            onClick={props.handleReset}
-            disabled={!props.dirty || props.isSubmitting}
-          />
+          <div className='mt-4'>
+            <input
+              type="submit"
+              value="Submit"
+              disabled={props.isSubmitting}
+              className="bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 border-b-4 border-blue-dark hover:border-blue rounded mr-4"
+            />
+            <input
+              type="reset"
+              value="Reset"
+              onClick={props.handleReset}
+              disabled={!props.dirty || props.isSubmitting}
+            />
+          </div>
         </Form>
       )}
     </Formik>
